@@ -1,24 +1,26 @@
 # Skilladiko
 
-A collection of Claude Code skills, commands, and agents designed to supercharge your software engineering workflow. These tools help you plan, implement, research, and commit code changes more effectively within Claude Code.
+A collection of AI agent skills and commands following the [agentskills.io](https://agentskills.io) open standard. Works with Claude Code, GitHub Copilot, Cursor, Windsurf, and other agent-based development tools.
+
+Supercharge your software engineering workflow with skills to plan, implement, research, and commit code changes more effectively.
 
 ## What's Included
 
-### 🎯 Commands (Skills)
+### 🎯 Skills
 
-**Commands** are user-invoked skills that run specialized workflows. Invoke them with `/command-name` in Claude Code.
+**Skills** are user-invoked workflows that handle common development tasks. Invoke them with `/skill-name` in your agent interface (e.g., `/create_plan` in Claude Code).
 
-| Command | Purpose |
-|---------|---------|
+| Skill | Purpose |
+|-------|---------|
 | **`create_plan`** | Create detailed implementation plans with thorough research and iteration. Perfect for breaking down complex features into actionable phases. |
 | **`implement_plan`** | Execute pre-created implementation plans with verification steps and progress tracking. |
 | **`research_codebase`** | Comprehensively research your codebase using parallel sub-agents to find patterns, understand architecture, and analyze implementation details. |
 | **`commit`** | Create git commits with clear, atomic messages and full user control (no Claude attribution). |
 | **`ci_commit`** | Create commits optimized for CI/CD workflows with automatic attribution. |
 
-### 🤖 Agents
+### 🤖 Research Agents
 
-**Agents** are specialized Claude Code agents that handle specific research and analysis tasks. They run in parallel for efficiency.
+**Agents** are specialized assistants that handle specific research and analysis tasks. They run in parallel for efficiency and are used internally by skills to understand your codebase.
 
 | Agent | Purpose |
 |-------|---------|
@@ -46,7 +48,7 @@ cd skilladiko
 ./scripts/link-skills.sh agents
 ```
 
-This creates symlinks in your local agent directory linking from the `.agents/skills/` directory in this repo. All skills and agents are in the same directory following the agentskills.io standard.
+This creates symlinks in your local agent directory linking from the `.agents/skills/` directory in this repo. All skills and agents use the [agentskills.io](https://agentskills.io) standard format, making them compatible with any agent system that supports the standard.
 
 ### Manual Installation
 
@@ -62,9 +64,16 @@ cp -r .agents/skills/* ~/.claude/skills/
 #### Option 2: Create Symlinks (Recommended for development)
 
 ```bash
+# For Claude Code
 mkdir -p ~/.claude/skills
 for dir in /path/to/skilladiko/.agents/skills/*/; do
   ln -s "$dir" ~/.claude/skills/$(basename "$dir")
+done
+
+# OR for .agents/ standard
+mkdir -p ~/.agents/skills
+for dir in /path/to/skilladiko/.agents/skills/*/; do
+  ln -s "$dir" ~/.agents/skills/$(basename "$dir")
 done
 ```
 
@@ -73,23 +82,30 @@ done
 After installation, verify your setup:
 
 ```bash
-ls ~/.claude/skills/      # Should show all 11 skill directories with SKILL.md files inside
-ls .agents/skills/          # Should show source directories
+# Check if skills are linked correctly
+ls ~/.claude/skills/      # For Claude Code installation
+# or
+ls ~/.agents/skills/      # For .agents/ standard installation
+
+# Should show 11 directories (commit, create_plan, etc.) with SKILL.md files inside each
+ls ~/.claude/skills/commit/  # Should contain SKILL.md
 ```
 
-Then reload Claude Code or restart it for the new skills to become available.
+Then reload your agent tool (Claude Code, Copilot, Cursor, etc.) for the new skills to become available.
 
 ## Usage Guide
+
+All skills work the same way across agent systems. Use the skill name with a leading `/` in your agent chat:
 
 ### Creating an Implementation Plan
 
 The typical workflow starts with planning:
 
-```bash
+```
 /create_plan
 ```
 
-This interactive command will:
+This interactive skill will:
 1. Gather context about what you want to build
 2. Research your codebase for relevant patterns
 3. Help you design the implementation approach

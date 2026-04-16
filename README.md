@@ -42,7 +42,7 @@ cd skilladiko
 ./scripts/link-agents.sh
 ```
 
-This creates symlinks in your local Claude Code directory (`~/.claude/commands` and `~/.claude/agents`).
+This creates symlinks in your local Claude Code directory (`~/.claude/commands` and `~/.claude/agents`), linking from the `skills/` and `agents/` directories in this repo.
 
 ### Manual Installation
 
@@ -52,10 +52,10 @@ If you prefer to install manually:
 
 ```bash
 # Copy commands
-cp .claude/commands/*.md ~/.claude/commands/
+cp skills/*.md ~/.claude/commands/
 
 # Copy agents
-cp .claude/agents/*.md ~/.claude/agents/
+cp agents/*.md ~/.claude/agents/
 ```
 
 #### Option 2: Create Symlinks (Recommended for development)
@@ -63,11 +63,11 @@ cp .claude/agents/*.md ~/.claude/agents/
 ```bash
 # Commands
 mkdir -p ~/.claude/commands
-ln -s /path/to/skilladiko/.claude/commands/* ~/.claude/commands/
+ln -s /path/to/skilladiko/skills/* ~/.claude/commands/
 
 # Agents
 mkdir -p ~/.claude/agents
-ln -s /path/to/skilladiko/.claude/agents/* ~/.claude/agents/
+ln -s /path/to/skilladiko/agents/* ~/.claude/agents/
 ```
 
 ### Verify Installation
@@ -77,6 +77,7 @@ After installation, verify your setup:
 ```bash
 ls ~/.claude/commands/      # Should show: commit.md, create_plan.md, etc.
 ls ~/.claude/agents/        # Should show: codebase-analyzer.md, etc.
+ls skills/ agents/          # Should show source files
 ```
 
 Then reload Claude Code or restart it for the new skills to become available.

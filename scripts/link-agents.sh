@@ -5,7 +5,7 @@
 # Default target: ~/.claude/agents
 
 TARGET_PATH="${1:-$HOME/.claude/agents}"
-SOURCE_DIR=".claude/agents"
+SOURCE_DIR="agents"
 
 # Check if source directory exists
 if [ ! -d "$SOURCE_DIR" ]; then

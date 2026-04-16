@@ -5,7 +5,7 @@
 # Default target: ~/.claude/commands
 
 TARGET_PATH="${1:-$HOME/.claude/commands}"
-SOURCE_DIR="skills"
+SOURCE_DIR=".agents/skills"
 
 # Check if source directory exists
 if [ ! -d "$SOURCE_DIR" ]; then

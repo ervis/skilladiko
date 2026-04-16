@@ -1,5 +1,6 @@
 ---
 description: Create git commits for session changes with clear, atomic messages
+name: ci-commit
 ---
 
 # Commit Changes

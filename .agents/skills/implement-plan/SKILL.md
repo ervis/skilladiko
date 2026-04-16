@@ -1,5 +1,6 @@
 ---
 description: Implement technical plans from thoughts/shared/plans with verification
+name: implement-plan
 ---
 
 # Implement Plan

@@ -1,5 +1,6 @@
 ---
 description: Research codebase comprehensively using parallel sub-agents
+name: research-codebase
 model: opus
 ---
 

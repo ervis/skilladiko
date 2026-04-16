@@ -1,5 +1,6 @@
 ---
 description: Create detailed implementation plans with thorough research and iteration
+name: create-plan
 model: opus
 ---
 

@@ -22,8 +22,6 @@ NC='\033[0m' # No Color
 BUMP_TYPE="patch"
 SHOULD_PUSH=false
 SHOW_ONLY=false
-TAG_AND_PUSH=false
-
 # Check for special flags first
 for arg in "$@"; do
   case $arg in
@@ -39,7 +37,6 @@ for arg in "$@"; do
       echo ""
       echo "Options:"
       echo "  --push         Push tag to origin after creating"
-      echo "  --tag-push     Create tag and push in one command"
       echo "  --show         Show current version and exit"
       echo "  --help, -h     Show this help message"
       echo ""
@@ -47,7 +44,6 @@ for arg in "$@"; do
       echo "  $0                       # Bump patch"
       echo "  $0 minor                 # Bump minor"
       echo "  $0 major --push          # Bump major and push"
-      echo "  $0 patch --tag-push      # Bump patch, tag, and push"
       echo "  $0 --show                # Show current version"
       exit 0
       ;;
@@ -55,10 +51,6 @@ for arg in "$@"; do
       SHOW_ONLY=true
       ;;
     --push)
-      SHOULD_PUSH=true
-      ;;
-    --tag-push)
-      TAG_AND_PUSH=true
       SHOULD_PUSH=true
       ;;
     major|minor|patch)

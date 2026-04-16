@@ -38,11 +38,15 @@ Clone the repository and run the installation script:
 ```bash
 git clone https://github.com/ervis/skilladiko.git
 cd skilladiko
-./scripts/link-commands.sh
-./scripts/link-agents.sh
+
+# For Claude Code (default)
+./scripts/link-skills.sh
+
+# OR for other tools using .agents/ standard
+./scripts/link-skills.sh agents
 ```
 
-This creates symlinks in your local Claude Code directory (`~/.claude/commands` and `~/.claude/agents`), linking from the `.agents/skills/` and `.agents/agents/` directories in this repo.
+This creates symlinks in your local agent directory linking from the `.agents/skills/` directory in this repo. All skills and agents are in the same directory following the agentskills.io standard.
 
 ### Manual Installation
 
@@ -51,23 +55,17 @@ If you prefer to install manually:
 #### Option 1: Copy Files (Recommended for isolated setups)
 
 ```bash
-# Copy commands
-cp .agents/skills/*.md ~/.claude/commands/
-
-# Copy agents
-cp .agents/agents/*.md ~/.claude/agents/
+# Copy all skills and agents
+cp -r .agents/skills/* ~/.claude/skills/
 ```
 
 #### Option 2: Create Symlinks (Recommended for development)
 
 ```bash
-# Commands
-mkdir -p ~/.claude/commands
-ln -s /path/to/skilladiko/.agents/skills/* ~/.claude/commands/
-
-# Agents
-mkdir -p ~/.claude/agents
-ln -s /path/to/skilladiko/.agents/agents/* ~/.claude/agents/
+mkdir -p ~/.claude/skills
+for dir in /path/to/skilladiko/.agents/skills/*/; do
+  ln -s "$dir" ~/.claude/skills/$(basename "$dir")
+done
 ```
 
 ### Verify Installation
@@ -75,9 +73,8 @@ ln -s /path/to/skilladiko/.agents/agents/* ~/.claude/agents/
 After installation, verify your setup:
 
 ```bash
-ls ~/.claude/commands/      # Should show: commit.md, create_plan.md, etc.
-ls ~/.claude/agents/        # Should show: codebase-analyzer.md, etc.
-ls .agents/skills/ .agents/agents/    # Should show source files
+ls ~/.claude/skills/      # Should show all 11 skill directories with SKILL.md files inside
+ls .agents/skills/          # Should show source directories
 ```
 
 Then reload Claude Code or restart it for the new skills to become available.
@@ -257,14 +254,14 @@ Common customizations:
 
 1. Verify installation:
    ```bash
-   ls ~/.claude/commands/
+   ls ~/.claude/skills/
    ```
 
 2. Reload Claude Code or restart the application
 
 3. Check that files are readable:
    ```bash
-   file ~/.claude/commands/commit.md
+   file ~/.claude/skills/commit.md
    ```
 
 ### Agents not running

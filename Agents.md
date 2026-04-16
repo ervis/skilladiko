@@ -19,7 +19,7 @@ This document provides a complete reference for all available agents in Skilladi
 
 ### codebase-locator
 
-**Location**: [.agents/agents/codebase-locator.md](.agents/agents/codebase-locator.md)
+**Location**: [.agents/skills/codebase-locator/SKILL.md](.agents/skills/codebase-locator/SKILL.md)
 
 **Purpose**: Fast file and directory locator. Creates a "map" of where code lives without analyzing its contents.
 
@@ -59,7 +59,7 @@ Agent({
 
 ### codebase-analyzer
 
-**Location**: [.agents/agents/codebase-analyzer.md`](.agents/agents/codebase-analyzer.md)
+**Location**: [.agents/skills/codebase-analyzer/SKILL.md](.agents/skills/codebase-analyzer/SKILL.md)
 
 **Purpose**: Deep-dive into specific code implementations. Analyzes HOW code works and finds integration points.
 
@@ -99,7 +99,7 @@ Agent({
 
 ### codebase-pattern-finder
 
-**Location**: [.agents/agents/codebase-pattern-finder.md`](.claude/.agents/agents/codebase-pattern-finder.md)
+**Location**: [.agents/skills/codebase-pattern-finder/SKILL.md](.agents/skills/codebase-pattern-finder/SKILL.md)
 
 **Purpose**: Find similar implementations and usage examples. Perfect for discovering patterns to model after.
 
@@ -139,7 +139,7 @@ Agent({
 
 ### thoughts-locator
 
-**Location**: [.agents/agents/thoughts-locator.md`](.claude/.agents/agents/thoughts-locator.md)
+**Location**: [.agents/skills/thoughts-locator/SKILL.md](.agents/skills/thoughts-locator/SKILL.md)
 
 **Purpose**: Discovers relevant documents in the `thoughts/` directory. Finds metadata, decisions, and context.
 
@@ -178,7 +178,7 @@ Agent({
 
 ### thoughts-analyzer
 
-**Location**: [.agents/agents/thoughts-analyzer.md`](.claude/.agents/agents/thoughts-analyzer.md)
+**Location**: [.agents/skills/thoughts-analyzer/SKILL.md](.agents/skills/thoughts-analyzer/SKILL.md)
 
 **Purpose**: Deep analysis of research documents. Extracts key insights and findings from `thoughts/` metadata.
 
@@ -217,7 +217,7 @@ Agent({
 
 ### web-search-researcher
 
-**Location**: [.agents/agents/web-search-researcher.md`](.claude/.agents/agents/web-search-researcher.md)
+**Location**: [.agents/skills/web-search-researcher/SKILL.md](.agents/skills/web-search-researcher/SKILL.md)
 
 **Purpose**: Research topics on the web when you need current information beyond the knowledge cutoff.
 
@@ -359,6 +359,6 @@ You can also use agents directly by calling them from your own agent requests.
 
 ## For More Information
 
-- Read agent definitions: [.agents/agents/](.agents/agents/)
-- See agent implementation: [.agents/agents/](.agents/agents/)
+- Read agent definitions: [.agents/skills/](.agents/skills/)
+- See agent implementation: [.agents/skills/](.agents/skills/)
 - Full project documentation: [README.md](README.md)

@@ -8,15 +8,15 @@ Supercharge your software engineering workflow with skills to plan, implement, r
 
 ### 🎯 Skills
 
-**Skills** are user-invoked workflows that handle common development tasks. Invoke them with `/skill-name` in your agent interface (e.g., `/create_plan` in Claude Code).
+**Skills** are user-invoked workflows that handle common development tasks. Invoke them with `/skill-name` in your agent interface (e.g., `/create-plan` in Claude Code).
 
 | Skill | Purpose |
 |-------|---------|
-| **`create_plan`** | Create detailed implementation plans with thorough research and iteration. Perfect for breaking down complex features into actionable phases. |
-| **`implement_plan`** | Execute pre-created implementation plans with verification steps and progress tracking. |
-| **`research_codebase`** | Comprehensively research your codebase using parallel sub-agents to find patterns, understand architecture, and analyze implementation details. |
+| **`create-plan`** | Create detailed implementation plans with thorough research and iteration. Perfect for breaking down complex features into actionable phases. |
+| **`implement-plan`** | Execute pre-created implementation plans with verification steps and progress tracking. |
+| **`research-codebase`** | Comprehensively research your codebase using parallel sub-agents to find patterns, understand architecture, and analyze implementation details. |
 | **`commit`** | Create git commits with clear, atomic messages and full user control (no Claude attribution). |
-| **`ci_commit`** | Create commits optimized for CI/CD workflows with automatic attribution. |
+| **`ci-commit`** | Create commits optimized for CI/CD workflows with automatic attribution. |
 
 ### 🤖 Research Agents
 
@@ -88,7 +88,7 @@ ls ~/.claude/skills/      # For Claude Code installation
 ls ~/.agents/skills/      # For .agents/ standard installation
 
 # Should show 11 directories (commit, create_plan, etc.) with SKILL.md files inside each
-ls ~/.claude/skills/commit/  # Should contain SKILL.md
+ls ~/.claude/skills/commit (or /ci-commit for CI workflows)/  # Should contain SKILL.md
 ```
 
 Then reload your agent tool (Claude Code, Copilot, Cursor, etc.) for the new skills to become available.
@@ -102,7 +102,7 @@ All skills work the same way across agent systems. Use the skill name with a lea
 The typical workflow starts with planning:
 
 ```
-/create_plan
+/create-plan
 ```
 
 This interactive skill will:
@@ -113,7 +113,7 @@ This interactive skill will:
 
 **Example**: Planning a new authentication feature
 ```
-User: /create_plan
+User: /create-plan
 Assistant: I'll help you create a detailed implementation plan...
 User: We need to add OAuth2 support. See ticket ENG-123.
 Assistant: [Reads ticket, researches codebase, asks clarifying questions...]
@@ -124,7 +124,7 @@ Assistant: [Reads ticket, researches codebase, asks clarifying questions...]
 Once you have a plan:
 
 ```bash
-/implement_plan thoughts/shared/plans/2026-04-16-oauth2-support.md
+/implement-plan thoughts/shared/plans/2026-04-16-oauth2-support.md
 ```
 
 This will:
@@ -138,7 +138,7 @@ This will:
 To understand how something works:
 
 ```bash
-/research_codebase
+/research-codebase
 ```
 
 This spawns multiple agents in parallel to:
@@ -153,7 +153,7 @@ After making changes, create a clean commit:
 
 **For regular commits** (user-attributed):
 ```bash
-/commit
+/commit (or /ci-commit for CI workflows)
 ```
 
 **For CI/CD commits** (Claude-attributed):
@@ -173,25 +173,25 @@ Both commands will:
 
 ```bash
 # 1. Create a plan
-/create_plan
+/create-plan
 
 # 2. Follow the planning dialog
 # (research, ask questions, refine approach)
 
 # 3. Get approval and review the plan file
 # 4. Start implementation
-/implement_plan thoughts/shared/plans/YYYY-MM-DD-feature.md
+/implement-plan thoughts/shared/plans/YYYY-MM-DD-feature.md
 
 # 5. Follow each phase with verification
 # 6. Commit your work
-/commit
+/commit (or /ci-commit for CI workflows)
 ```
 
 ### Example 2: Understanding Existing Code
 
 ```bash
 # 1. Research the codebase
-/research_codebase
+/research-codebase
 
 # 2. Agents will find and analyze related code
 # (runs in parallel for speed)
@@ -204,17 +204,17 @@ Both commands will:
 
 ```bash
 # 1. Create a plan for the refactoring
-/create_plan
+/create-plan
 
 # 2. Specify scope carefully
 # (what you're NOT changing)
 
 # 3. Get detailed phase-by-phase guidance
-/implement_plan [your-plan-file]
+/implement-plan [your-plan-file]
 
 # 4. Verify each phase works
 # 5. Commit with clear messages
-/commit
+/commit (or /ci-commit for CI workflows)
 ```
 
 ## Key Features
@@ -277,7 +277,7 @@ Common customizations:
 
 3. Check that files are readable:
    ```bash
-   file ~/.claude/skills/commit.md
+   file ~/.claude/skills/commit (or /ci-commit for CI workflows).md
    ```
 
 ### Agents not running
@@ -309,14 +309,14 @@ Some operations require user approval. When prompted:
 
 ### For Complex Plans
 
-- Start with `/create_plan` for interactive guidance
+- Start with `/create-plan` for interactive guidance
 - Let agents research in parallel (they run concurrently)
 - Review findings before planning
 - Break into smaller phases for clarity
 
 ### For Better Commits
 
-- Use `/commit` for thoughtful, atomic commits
+- Use `/commit (or /ci-commit for CI workflows)` for thoughtful, atomic commits
 - Group related changes together
 - Write messages that explain *why*, not just *what*
 - Review the diff before confirming
@@ -336,9 +336,9 @@ No other dependencies required!
 All commands include built-in help:
 
 ```bash
-/create_plan     # Interactive guidance
-/implement_plan  # Phase-by-phase walkthrough
-/research_codebase  # Automatic parallel research
+/create-plan     # Interactive guidance
+/implement-plan  # Phase-by-phase walkthrough
+/research-codebase  # Automatic parallel research
 ```
 
 ### External Resources

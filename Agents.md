@@ -339,9 +339,9 @@ Agent({
 
 These agents are used internally by Skilladiko commands:
 
-- **`/create_plan`** uses `codebase-locator` and `codebase-analyzer` to research your codebase
-- **`/implement_plan`** uses agents to verify implementation progress
-- **`/research_codebase`** runs multiple agents in parallel
+- **`/create-plan`** uses `codebase-locator` and `codebase-analyzer` to research your codebase
+- **`/implement-plan`** uses agents to verify implementation progress
+- **`/research-codebase`** runs multiple agents in parallel
 
 You can also use agents directly by calling them from your own agent requests.
 

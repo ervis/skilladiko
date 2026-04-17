@@ -1,6 +1,7 @@
 ---
 description: Review Ruby code for clean code principles and improve readability and maintainability
 name: rails-code-review
+model: opus
 ---
 
 # Rails Architecture & Design Review

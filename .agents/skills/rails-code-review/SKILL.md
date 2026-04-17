@@ -3,7 +3,7 @@ description: Review Ruby code for clean code principles and improve readability 
 name: rails-code-review
 ---
 
-## Rails Architecture & Design Review
+# Rails Architecture & Design Review
 
 ## Purpose
 Review Rails code for architecture, design, maintainability, performance, and safety.
@@ -19,76 +19,38 @@ Review Rails code for architecture, design, maintainability, performance, and sa
 - functional core, imperative shell
 - separating refactors from abstraction changes
 - misuse resistance and common-path ergonomics
-- query efficiency, batching, migrations, and caching
+- query efficiency, batching, migrations, caching
 - data volume awareness
+- domain-owned construction and retrieval
 
 ## Mindset
 - Prefer simple, idiomatic Rails code that is easy to read and test.
 - Prefer small, focused objects with clear responsibilities.
 - Prefer design by contract: validate at boundaries, trust internal invariants.
 - Prefer branch-light, mutation-light implementations.
-- Prefer methods as small abstractions.
 - Prefer explicit expected-error handling and clear transaction scope.
 - Prefer PRs that separate behavior changes, refactors, and abstraction changes.
-- Prefer designs that make the common path easy, incorrect usage hard, and abuse difficult or impossible when practical.
-- Prefer solutions sized appropriately for expected data volume.
+- Prefer designs that make the common path easy and misuse hard.
+- Prefer solutions sized to expected data volume.
+- Prefer model-owned or domain-owned named constructors and finders.
 
 ## Review scope
 Controllers, models, services, jobs, policies, serializers, forms, concerns, migrations, queries, caches, and cross-file workflows.
 
 ## Core guidance
-
-### Controllers
-Keep thin. Handle auth, params, and response.
-
-### Models
-Keep record-level rules and validations. Avoid god objects and orchestration.
-
-### Use case / service objects
-Use for non-trivial workflows. Keep them single-purpose, explicit, branch-light, and easy to test.
-
-### Concerns
-Use sparingly. Only when cohesive and truly shared.
-
-### Forms / jobs / mailers / policies / serializers
-Keep narrow. Avoid hidden orchestration and duplicated rules.
-
-### Input validation
-Validate high in the stack. Internal methods may trust established contracts unless they cross a new boundary.
-
-### Transactions
-Be explicit about what is inside vs outside a transaction. Avoid hidden rollback boundaries and side effects that escape atomic work.
-
-### Errors
-Separate expected failures from unexpected failures.
-- Expected: business rejection, validation, known domain errors
-- Unexpected: bugs, infrastructure failures, programmer mistakes
-
-Handle expected failures explicitly. Do not swallow unexpected ones.
-
-### Refactors vs abstractions
-Flag PRs that mix mechanical refactoring with abstraction changes or behavior changes. Prefer smaller PRs when possible.
-
-### Misuse resistance
-Make the intended path obvious. Make incorrect usage hard. Make abusive or boundary-bypassing usage difficult or impossible when practical.
-
-### Performance, scale, and data access
-Check query efficiency, batching, migration safety, and caching tradeoffs.
-- avoid N+1s and unbounded scans
-- prefer bounded, indexed queries
-- batch large reads/writes
-- make migrations safe and reversible
-- cache only when justified by cost, staleness tolerance, and invalidation strategy
-
-### Data volume
-Ask for expected data volume when it affects design:
-- number of records
-- request rate
-- growth rate
-- cache size
-- migration size
-- background job volume
-- memory / latency constraints
+- Controllers: keep thin.
+- Models: keep record-level rules and validations.
+- Use case / service objects: use for non-trivial workflows; keep single-purpose.
+- Concerns: use sparingly; only when cohesive and shared.
+- Forms / jobs / mailers / policies / serializers: keep narrow.
+- Input validation: validate high in the stack; internal methods may trust established contracts.
+- Transactions: make atomic scope explicit.
+- Errors: separate expected failures from unexpected failures; do not swallow unexpected ones.
+- Refactors vs abstractions: flag PRs that mix them.
+- Misuse resistance: make intended use obvious; make abuse difficult.
+- Performance / scale: check queries, batching, migrations, caching.
+- Data volume: ask for record count, request rate, growth, cache size, migration size, job volume, memory/latency constraints.
+- Domain-owned construction and retrieval: use class methods or dedicated query objects; return domain objects directly; avoid scattered ad hoc creation/query logic.
 
 ## What to flag
 - fat controllers or models
@@ -110,16 +72,18 @@ Ask for expected data volume when it affects design:
 - missing batching for large data
 - unnecessary or poorly invalidated caching
 - designs that ignore expected data volume
+- ad hoc creation/query logic outside the domain owner
 
 ## What not to flag
 - simple idiomatic Rails code
 - clear delegation to a use case object
 - cohesive concerns
-- direct ActiveRecord usage when it is clearest
+- direct ActiveRecord usage when clearest
 - localized callbacks
 - small abstractions that improve clarity
 - internal methods that trust validated contracts
 - separate PRs for refactors and abstraction changes
+- domain-owned named constructors and finders
 
 ## Review behavior
 If context is missing, ask targeted questions. Do not guess about:
@@ -128,11 +92,12 @@ If context is missing, ask targeted questions. Do not guess about:
 - expected vs unexpected errors
 - transaction scope
 - side effects
-- whether an object is shared or internal-only
-- whether the PR changes behavior or abstraction
-- whether the full change set has been reviewed
-- how the design could be misused or abused
+- shared vs internal-only objects
+- behavior vs abstraction changes
+- full change set
+- misuse/abuse risks
 - expected data volume or growth
+- ownership of creation or retrieval
 
 ## Output
 For each finding, include:

@@ -33,6 +33,10 @@ Review Rails code for architecture, design, maintainability, performance, and sa
 - Prefer designs that make the common path easy and misuse hard.
 - Prefer solutions sized to expected data volume.
 - Prefer model-owned or domain-owned named constructors and finders.
+- Review the full diff.
+- Think deeply about constraints and tradeoffs.
+- Trace impact across related code.
+- Ask targeted questions when context is unclear.
 
 ## Review scope
 Controllers, models, services, jobs, policies, serializers, forms, concerns, migrations, queries, caches, and cross-file workflows.

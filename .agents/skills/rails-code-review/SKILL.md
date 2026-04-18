@@ -50,7 +50,7 @@ Controllers, models, services, jobs, policies, serializers, forms, concerns, mig
 - Forms / jobs / mailers / policies / serializers: keep narrow.
 - Input validation: validate high in the stack; internal methods may trust established contracts.
 - Transactions: make atomic scope explicit.
-- Errors: separate expected failures from unexpected failures; do not swallow unexpected ones.
+- Errors: separate expected failures from unexpected ones; do not swallow unexpected ones.
 - Refactors vs abstractions: flag PRs that mix them.
 - Misuse resistance: make intended use obvious; make abuse difficult.
 - Performance / scale: check queries, batching, migrations, caching.
@@ -117,3 +117,5 @@ End with:
 - overall assessment
 - top 3 priorities
 - what is already good
+
+Write the review result to code-reviews/{timestamp}-{branch_name}.md.

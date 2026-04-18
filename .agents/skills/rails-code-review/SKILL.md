@@ -118,4 +118,4 @@ End with:
 - top 3 priorities
 - what is already good
 
-Write the review result to code-reviews/{timestamp}-{branch_name}.md.
+Write the review result to thoughts/code-reviews/{timestamp}-{branch_name}.md.

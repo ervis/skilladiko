@@ -362,7 +362,11 @@ MIT
 
 ## Credits
 
-Inspired by and adapted from [humanlayer/humanlayer](https://github.com/humanlayer/humanlayer).
+Inspired by and adapted from 
+
+- [humanlayer/humanlayer](https://github.com/humanlayer/humanlayer).
+- [https://github.com/mattpocock/skills](https://github.com/mattpocock/skills)
+
 
 ---
 

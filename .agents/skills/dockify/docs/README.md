@@ -320,6 +320,40 @@ The current state of `docs/` should always reflect the current state of the syst
 - **Docs**: preserve the canonical understanding of the system at each commit
 - **Retrospective**: captures lessons from planning and implementation so future work can improve
 
+## Efficiency Patterns for LLM Consumption
+
+These are optional practices that make `docs/` faster and cheaper for agents to navigate.
+
+### INDEX.md — one-line map of all docs
+
+Maintain a `docs/INDEX.md` with one line per document: filename and a short description of what it covers. Agents can read this single file to find relevant docs without reading everything.
+
+```markdown
+# Docs Index
+
+- [architecture/overview.md](architecture/overview.md) — system components and how they connect
+- [components/auth.md](components/auth.md) — authentication module: interface, invariants, failure modes
+- [decisions/use-postgres.md](decisions/use-postgres.md) — why Postgres over alternatives
+- [invariants/ordering.md](invariants/ordering.md) — event ordering guarantees
+```
+
+Update `INDEX.md` whenever a doc is added, renamed, or deleted.
+
+### Keep docs short and factual
+
+Long narrative prose is expensive to load and hard to search. Prefer:
+- bullet points over paragraphs
+- concrete facts over explanations
+- explicit headings that make grepping reliable
+
+### One concept per file
+
+Split large docs rather than growing them. A focused file is easier to retrieve and replace without touching unrelated content.
+
+### Stable filenames
+
+LLMs and humans build mental maps around filenames. Rename only when the old name is genuinely misleading. When you do rename, update `INDEX.md` and any cross-links in the same commit.
+
 ## What Not to Optimize For
 
 Avoid:

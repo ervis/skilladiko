@@ -2,6 +2,22 @@
 
 Skill for keeping a project's live documentation accurate as you work.
 
+## Concept: Docs-as-Code for LLMs
+
+Dockify is an implementation of **docs-as-code** designed for LLM consumption.
+
+Docs-as-code is the practice of treating documentation like source code: version-controlled, reviewed in pull requests, and kept accurate with the system it describes. It is a well-established practice in software engineering.
+
+Dockify extends this with an explicit LLM-consumption constraint: the `docs/` folder is a structured, retrievable knowledge base that agents read before starting work and update after completing it. This makes it a **living context source** — the LLM equivalent of a wiki that is always current at HEAD.
+
+The key properties that make it work for LLMs:
+- **Commit-accurate**: docs reflect the system as it exists at each commit, not at some past or aspirational state
+- **Structured by type**: agents can navigate to the right folder without reading everything
+- **Deletable when stale**: wrong docs are worse than no docs
+- **Human-maintained**: agents assist, but humans own the knowledge
+
+Related patterns: Architecture Decision Records (ADRs), living documentation, agent memory systems.
+
 ## Docs Location
 
 Projects are free to keep their live documentation anywhere — `docs/`, `wiki/`, `handbook/`, or any other path. This skill works with any location as long as it knows where to look.

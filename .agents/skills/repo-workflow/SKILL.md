@@ -30,7 +30,10 @@ This skill is designed to compose with more specialized skills such as:
 - `research-codebase`
 - `create-plan`
 - `implement-plan`
+- `dockify`
 - `commit`
+
+The canonical documentation pattern used by this skill is **dockify**. See `.agents/skills/dockify/README.md` for folder structure, routing, and adoption steps.
 
 ## Default Workflow
 

@@ -1,11 +1,11 @@
 ---
-description: Implement technical plans from thoughts/shared/plans with verification
+description: Implement technical plans from the project's docs/design folder with verification
 name: implement-plan
 ---
 
 # Implement Plan
 
-You are tasked with implementing an approved technical plan from `thoughts/shared/plans/`. These plans contain phases with specific changes and success criteria.
+You are tasked with implementing an approved technical plan. Plans live in `<docs>/design/` where `<docs>` is set by `DOCKIFY_DOCS_DIR` in `CLAUDE.md` (default: `docs/`). These plans contain phases with specific changes and success criteria.
 
 ## Getting Started
 
@@ -83,3 +83,12 @@ If the plan has existing checkmarks:
 - Verify previous work only if something seems off
 
 Remember: You're implementing a solution, not just checking boxes. Keep the end goal in mind and maintain forward momentum.
+
+## Documentation
+
+After all phases are complete, update canonical docs per the dockify pattern:
+- Update `<docs>/` with any durable system facts that changed (architecture, behavior, invariants, usage, operations)
+- For substantial tasks, add a task log to `<docs>/task-logs/`
+- If there are lessons for future work, add a retrospective to `<docs>/retrospectives/`
+
+Resolve `<docs>` from `DOCKIFY_DOCS_DIR` in `CLAUDE.md` (default: `docs/`). See `.agents/skills/dockify/README.md` for the full routing table.

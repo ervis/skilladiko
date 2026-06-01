@@ -1,5 +1,4 @@
 ---
-name: thoughts-locator
 description: Discovers relevant documents in thoughts/ directory (We use this for all sorts of metadata storage!). This is really only relevant/needed when you're in a reseaching mood and need to figure out if we have random thoughts written down that are relevant to your current research task. Based on the name, I imagine you can guess this is the `thoughts` equivilent of `codebase-locator`
 tools: Grep, Glob, LS
 model: sonnet
@@ -35,7 +34,7 @@ First, think deeply about the search approach - consider which directories to pr
 
 ### Directory Structure
 ```
-thoughts/
+<issues_dir>/ or <shared_dir>/
 ├── shared/          # Team-shared documents
 │   ├── research/    # Research documents
 │   ├── plans/       # Implementation plans
@@ -55,10 +54,12 @@ thoughts/
 - Search in searchable/ but report corrected paths
 
 ### Path Correction
-**CRITICAL**: If you find files in thoughts/searchable/, report the actual path:
-- `thoughts/searchable/shared/research/api.md` → `thoughts/shared/research/api.md`
-- `thoughts/searchable/allison/tickets/eng_123.md` → `thoughts/allison/tickets/eng_123.md`
-- `thoughts/searchable/global/patterns.md` → `thoughts/global/patterns.md`
+
+**CRITICAL**: If you find files in searchable/, report the actual path:
+
+- `<issues_dir>/ or <shared_dir>/searchable/shared/research/api.md` → `<issues_dir>/ or <shared_dir>/shared/research/api.md`
+- `<issues_dir>/ or <shared_dir>/searchable/allison/tickets/eng_123.md` → `<issues_dir>/ or <shared_dir>/allison/tickets/eng_123.md`
+- `<issues_dir>/ or <shared_dir>/searchable/global/patterns.md` → `<issues_dir>/ or <shared_dir>/global/patterns.md`
 
 Only remove "searchable/" from the path - preserve all other directory structure!
 
@@ -70,22 +71,22 @@ Structure your findings like this:
 ## Thought Documents about [Topic]
 
 ### Tickets
-- `thoughts/allison/tickets/eng_1234.md` - Implement rate limiting for API
-- `thoughts/shared/tickets/eng_1235.md` - Rate limit configuration design
+- `<issues_dir>/ or <shared_dir>/allison/tickets/eng_1234.md` - Implement rate limiting for API
+- `<issues_dir>/ or <shared_dir>/shared/tickets/eng_1235.md` - Rate limit configuration design
 
 ### Research Documents
-- `thoughts/shared/research/2024-01-15_rate_limiting_approaches.md` - Research on different rate limiting strategies
-- `thoughts/shared/research/api_performance.md` - Contains section on rate limiting impact
+- `<issues_dir>/ or <shared_dir>/shared/research/2024-01-15_rate_limiting_approaches.md` - Research on different rate limiting strategies
+- `<issues_dir>/ or <shared_dir>/shared/research/api_performance.md` - Contains section on rate limiting impact
 
 ### Implementation Plans
-- `thoughts/shared/plans/api-rate-limiting.md` - Detailed implementation plan for rate limits
+- `<issues_dir>/ or <shared_dir>/shared/plans/api-rate-limiting.md` - Detailed implementation plan for rate limits
 
 ### Related Discussions
-- `thoughts/allison/notes/meeting_2024_01_10.md` - Team discussion about rate limiting
-- `thoughts/shared/decisions/rate_limit_values.md` - Decision on rate limit thresholds
+- `<issues_dir>/ or <shared_dir>/allison/notes/meeting_2024_01_10.md` - Team discussion about rate limiting
+- `<issues_dir>/ or <shared_dir>/shared/decisions/rate_limit_values.md` - Decision on rate limit thresholds
 
 ### PR Descriptions
-- `thoughts/shared/prs/pr_456_rate_limiting.md` - PR that implemented basic rate limiting
+- `<issues_dir>/ or <shared_dir>/shared/prs/pr_456_rate_limiting.md` - PR that implemented basic rate limiting
 
 Total: 8 relevant documents found
 ```

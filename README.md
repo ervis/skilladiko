@@ -17,6 +17,15 @@ Supercharge your software engineering workflow with skills to plan, implement, r
 | **`research-codebase`** | Comprehensively research your codebase using parallel sub-agents to find patterns, understand architecture, and analyze implementation details. |
 | **`commit`** | Create git commits with clear, atomic messages and full user control (no Claude attribution). |
 | **`ci-commit`** | Create commits optimized for CI/CD workflows with automatic attribution. |
+| **`qrspi-validate`** | Validate QRSPI configuration and artifact integrity. |
+| **`qrspi-question`** | Decompose a complex task into neutral research questions. |
+| **`qrspi-research`** | Answer research questions with facts from the codebase. |
+| **`qrspi-design`** | Create design document with decisions and patterns. |
+| **`qrspi-structure`** | Structure the implementation into vertical slices. |
+| **`qrspi-plan`** | Create detailed implementation plan with checkpoints. |
+| **`qrspi-worktree`** | Set up an isolated git worktree for implementation. |
+| **`qrspi-implement`** | Execute the implementation plan phase-by-phase. |
+| **`qrspi-pr`** | Create a pull request grounded in design document. |
 
 ### 🤖 Research Agents
 
@@ -96,6 +105,35 @@ Then reload your agent tool (Claude Code, Copilot, Cursor, etc.) for the new ski
 ## Usage Guide
 
 All skills work the same way across agent systems. Use the skill name with a leading `/` in your agent chat:
+
+### QRSPI Workflow
+
+QRSPI is a 9-phase workflow for breaking down complex coding tasks systematically:
+
+```
+Validate → Question → Research → Design → Structure → Plan → Worktree → Implement → PR
+```
+
+**Quick Start:**
+```bash
+/qrspi-validate                      # Validate configuration
+/qrspi-question "Your task here"     # Decompose into research questions
+/qrspi-research <artifact_path>/     # Research the codebase
+/qrspi-design <artifact_path>/       # Design the solution
+/qrspi-structure <artifact_path>/    # Structure implementation phases
+/qrspi-plan <artifact_path>/         # Create detailed plan
+/qrspi-worktree <artifact_path>/     # Set up isolated worktree
+/qrspi-implement <artifact_path>/    # Implement the plan
+/qrspi-pr <artifact_path>/           # Create pull request
+```
+
+Configure with `.qrspi` in your project root:
+```sh
+issues_dir=/path/to/vault/issues
+shared_dir=/path/to/vault/shared
+```
+
+[Learn more about QRSPI](https://github.com/matanshavit/qrspi)
 
 ### Creating an Implementation Plan
 

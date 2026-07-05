@@ -19,7 +19,7 @@ This document provides a complete reference for all available agents in Skilladi
 
 ### codebase-locator
 
-**Location**: [.agents/skills/codebase-locator/SKILL.md](.agents/skills/codebase-locator/SKILL.md)
+**Location**: [agents/codebase-locator/AGENT.md](agents/codebase-locator/AGENT.md)
 
 **Purpose**: Fast file and directory locator. Creates a "map" of where code lives without analyzing its contents.
 
@@ -59,7 +59,7 @@ Agent({
 
 ### codebase-analyzer
 
-**Location**: [.agents/skills/codebase-analyzer/SKILL.md](.agents/skills/codebase-analyzer/SKILL.md)
+**Location**: [agents/codebase-analyzer/AGENT.md](agents/codebase-analyzer/AGENT.md)
 
 **Purpose**: Deep-dive into specific code implementations. Analyzes HOW code works and finds integration points.
 
@@ -99,7 +99,7 @@ Agent({
 
 ### codebase-pattern-finder
 
-**Location**: [.agents/skills/codebase-pattern-finder/SKILL.md](.agents/skills/codebase-pattern-finder/SKILL.md)
+**Location**: [agents/codebase-pattern-finder/AGENT.md](agents/codebase-pattern-finder/AGENT.md)
 
 **Purpose**: Find similar implementations and usage examples. Perfect for discovering patterns to model after.
 
@@ -139,7 +139,7 @@ Agent({
 
 ### thoughts-locator
 
-**Location**: [.agents/skills/thoughts-locator/SKILL.md](.agents/skills/thoughts-locator/SKILL.md)
+**Location**: [agents/thoughts-locator/AGENT.md](agents/thoughts-locator/AGENT.md)
 
 **Purpose**: Discovers relevant documents in the `thoughts/` directory. Finds metadata, decisions, and context.
 
@@ -178,7 +178,7 @@ Agent({
 
 ### thoughts-analyzer
 
-**Location**: [.agents/skills/thoughts-analyzer/SKILL.md](.agents/skills/thoughts-analyzer/SKILL.md)
+**Location**: [agents/thoughts-analyzer/AGENT.md](agents/thoughts-analyzer/AGENT.md)
 
 **Purpose**: Deep analysis of research documents. Extracts key insights and findings from `thoughts/` metadata.
 
@@ -217,7 +217,7 @@ Agent({
 
 ### web-search-researcher
 
-**Location**: [.agents/skills/web-search-researcher/SKILL.md](.agents/skills/web-search-researcher/SKILL.md)
+**Location**: [agents/web-search-researcher/AGENT.md](agents/web-search-researcher/AGENT.md)
 
 **Purpose**: Research topics on the web when you need current information beyond the knowledge cutoff.
 
@@ -337,11 +337,11 @@ Agent({
 
 ## Integration with Commands
 
-These agents are used internally by Skilladiko commands:
+These agents are used internally by Skilladiko skills:
 
-- **`/create-plan`** uses `codebase-locator` and `codebase-analyzer` to research your codebase
-- **`/implement-plan`** uses agents to verify implementation progress
-- **`/research-codebase`** runs multiple agents in parallel
+- **`/qrspi-research`** uses `codebase-locator`, `codebase-analyzer`, and `codebase-pattern-finder` to research your codebase
+- **`/qrspi-design`** and **`/qrspi-plan`** draw on research agent findings to shape the approach
+- **`/zoom-out`** leans on `codebase-locator` and `codebase-analyzer` to build a higher-level picture
 
 You can also use agents directly by calling them from your own agent requests.
 
@@ -359,6 +359,5 @@ You can also use agents directly by calling them from your own agent requests.
 
 ## For More Information
 
-- Read agent definitions: [.agents/skills/](.agents/skills/)
-- See agent implementation: [.agents/skills/](.agents/skills/)
+- Read agent definitions: [agents/](agents/)
 - Full project documentation: [README.md](README.md)

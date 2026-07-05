@@ -11,8 +11,8 @@
 SYSTEM="${1:-claude}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-SKILLS_SOURCE_DIR="$REPO_ROOT/.agents/skills"
-AGENTS_SOURCE_DIR="$REPO_ROOT/.agents/agents"
+SKILLS_SOURCE_DIR="$REPO_ROOT/skills"
+AGENTS_SOURCE_DIR="$REPO_ROOT/agents"
 
 if [ "$SYSTEM" = "agents" ]; then
   SKILLS_TARGET_PATH="${2:-$HOME/.agents/skills}"

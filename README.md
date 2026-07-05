@@ -1,35 +1,53 @@
 # Skilladiko
 
-A collection of AI agent skills and commands following the [agentskills.io](https://agentskills.io) open standard. Works with Claude Code, GitHub Copilot, Cursor, Windsurf, and other agent-based development tools.
+A collection of AI agent skills and agents following the [agentskills.io](https://agentskills.io) open standard. Works with Claude Code, GitHub Copilot, Cursor, Windsurf, and other agent-based development tools.
 
 Supercharge your software engineering workflow with skills to plan, implement, research, and commit code changes more effectively.
+
+## Repository Layout
+
+```text
+skilladiko/
+├── skills/        # User-invoked workflows (each has a SKILL.md)
+├── agents/        # Specialized research/analysis subagents (each has an AGENT.md)
+└── scripts/       # Installation and maintenance scripts
+```
 
 ## What's Included
 
 ### 🎯 Skills
 
-**Skills** are user-invoked workflows that handle common development tasks. Invoke them with `/skill-name` in your agent interface (e.g., `/create-plan` in Claude Code).
+**Skills** are user-invoked workflows that handle common development tasks. Invoke them with `/skill-name` in your agent interface (e.g., `/commit` in Claude Code).
 
 | Skill | Purpose |
 |-------|---------|
-| **`create-plan`** | Create detailed implementation plans with thorough research and iteration. Perfect for breaking down complex features into actionable phases. |
-| **`implement-plan`** | Execute pre-created implementation plans with verification steps and progress tracking. |
-| **`research-codebase`** | Comprehensively research your codebase using parallel sub-agents to find patterns, understand architecture, and analyze implementation details. |
 | **`commit`** | Create git commits with clear, atomic messages and full user control (no Claude attribution). |
-| **`ci-commit`** | Create commits optimized for CI/CD workflows with automatic attribution. |
-| **`qrspi-validate`** | Validate QRSPI configuration and artifact integrity. |
-| **`qrspi-question`** | Decompose a complex task into neutral research questions. |
-| **`qrspi-research`** | Answer research questions with facts from the codebase. |
-| **`qrspi-design`** | Create design document with decisions and patterns. |
-| **`qrspi-structure`** | Structure the implementation into vertical slices. |
-| **`qrspi-plan`** | Create detailed implementation plan with checkpoints. |
-| **`qrspi-worktree`** | Set up an isolated git worktree for implementation. |
-| **`qrspi-implement`** | Execute the implementation plan phase-by-phase. |
-| **`qrspi-pr`** | Create a pull request grounded in design document. |
+| **`handoff`** | Write or update a handoff document so the next agent with fresh context can continue the work. |
+| **`grill-me`** | Interview you relentlessly about a plan or design until reaching shared understanding, resolving each branch of the decision tree. |
+| **`to-issues`** | Break a plan, spec, or PRD into independently-grabbable GitHub issues using tracer-bullet vertical slices. |
+| **`zoom-out`** | Step back and give broader context or a higher-level perspective on a section of code. |
+| **`caveman`** | Ultra-compressed communication mode that cuts token usage ~75% while keeping full technical accuracy. |
+| **`rails-code-review`** | Review Ruby code for clean-code principles and improve readability and maintainability. |
+| **`ruby-debug`** | Debug a failing Ruby test by setting a breakpoint and inspecting state (bash + tmux, no gem dependencies). |
+
+#### QRSPI Workflow
+
+QRSPI is a phased workflow for breaking down complex coding tasks systematically:
+
+| Skill | Purpose |
+|-------|---------|
+| **`qrspi-question`** | Decompose a task into neutral research questions. |
+| **`qrspi-research`** | Objective codebase research driven by questions — facts only, no opinions. |
+| **`qrspi-design`** | Design discussion — align on where we are going before planning how. |
+| **`qrspi-structure`** | Structure outline — vertical slices with test checkpoints. |
+| **`qrspi-plan`** | Tactical implementation plan — the agent's working document. |
+| **`qrspi-worktree`** | Create an isolated git worktree for implementation. |
+| **`qrspi-implement`** | Execute the plan phase by phase with verification checkpoints. |
+| **`qrspi-pr`** | Create a pull request with context from the design discussion. |
 
 ### 🤖 Research Agents
 
-**Agents** are specialized assistants that handle specific research and analysis tasks. They run in parallel for efficiency and are used internally by skills to understand your codebase.
+**Agents** are specialized assistants that handle specific research and analysis tasks. They run in parallel for efficiency and are used internally by skills to understand your codebase. See [Agents.md](Agents.md) for full details.
 
 | Agent | Purpose |
 |-------|---------|
@@ -50,14 +68,14 @@ Clone the repository and run the installation script:
 git clone https://github.com/ervis/skilladiko.git
 cd skilladiko
 
-# For Claude Code (default)
+# For Claude Code (default) — links to ~/.claude/skills and ~/.claude/agents
 ./scripts/link-skills.sh
 
-# OR for other tools using .agents/ standard
+# OR for other tools using the .agents/ standard — links to ~/.agents/skills and ~/.agents/agents
 ./scripts/link-skills.sh agents
 ```
 
-This creates symlinks in your local agent directory linking from the `.agents/skills/` directory in this repo. All skills and agents use the [agentskills.io](https://agentskills.io) standard format, making them compatible with any agent system that supports the standard.
+This creates symlinks in your local agent directory pointing at the `skills/` and `agents/` directories in this repo. All skills and agents use the [agentskills.io](https://agentskills.io) standard format, making them compatible with any agent system that supports the standard.
 
 ### Manual Installation
 
@@ -67,22 +85,20 @@ If you prefer to install manually:
 
 ```bash
 # Copy all skills and agents
-cp -r .agents/skills/* ~/.claude/skills/
+cp -r skills/*  ~/.claude/skills/
+cp -r agents/*  ~/.claude/agents/
 ```
 
 #### Option 2: Create Symlinks (Recommended for development)
 
 ```bash
 # For Claude Code
-mkdir -p ~/.claude/skills
-for dir in /path/to/skilladiko/.agents/skills/*/; do
+mkdir -p ~/.claude/skills ~/.claude/agents
+for dir in /path/to/skilladiko/skills/*/; do
   ln -s "$dir" ~/.claude/skills/$(basename "$dir")
 done
-
-# OR for .agents/ standard
-mkdir -p ~/.agents/skills
-for dir in /path/to/skilladiko/.agents/skills/*/; do
-  ln -s "$dir" ~/.agents/skills/$(basename "$dir")
+for dir in /path/to/skilladiko/agents/*/; do
+  ln -s "$dir" ~/.claude/agents/$(basename "$dir")
 done
 ```
 
@@ -91,40 +107,35 @@ done
 After installation, verify your setup:
 
 ```bash
-# Check if skills are linked correctly
-ls ~/.claude/skills/      # For Claude Code installation
-# or
-ls ~/.agents/skills/      # For .agents/ standard installation
-
-# Should show 11 directories (commit, create_plan, etc.) with SKILL.md files inside each
-ls ~/.claude/skills/commit (or /ci-commit for CI workflows)/  # Should contain SKILL.md
+# Check that skills and agents are linked correctly
+ls ~/.claude/skills/      # Should list the skill directories, each with a SKILL.md
+ls ~/.claude/agents/      # Should list the agent directories, each with an AGENT.md
 ```
 
 Then reload your agent tool (Claude Code, Copilot, Cursor, etc.) for the new skills to become available.
 
 ## Usage Guide
 
-All skills work the same way across agent systems. Use the skill name with a leading `/` in your agent chat:
+All skills work the same way across agent systems. Use the skill name with a leading `/` in your agent chat.
 
 ### QRSPI Workflow
 
-QRSPI is a 9-phase workflow for breaking down complex coding tasks systematically:
+QRSPI breaks complex coding tasks into ordered phases:
 
-```
-Validate → Question → Research → Design → Structure → Plan → Worktree → Implement → PR
+```text
+Question → Research → Design → Structure → Plan → Worktree → Implement → PR
 ```
 
 **Quick Start:**
 ```bash
-/qrspi-validate                      # Validate configuration
 /qrspi-question "Your task here"     # Decompose into research questions
-/qrspi-research <artifact_path>/     # Research the codebase
-/qrspi-design <artifact_path>/       # Design the solution
-/qrspi-structure <artifact_path>/    # Structure implementation phases
-/qrspi-plan <artifact_path>/         # Create detailed plan
-/qrspi-worktree <artifact_path>/     # Set up isolated worktree
-/qrspi-implement <artifact_path>/    # Implement the plan
-/qrspi-pr <artifact_path>/           # Create pull request
+/qrspi-research <artifact_path>/     # Research the codebase (facts only)
+/qrspi-design <artifact_path>/       # Align on the approach
+/qrspi-structure <artifact_path>/    # Break into vertical slices
+/qrspi-plan <artifact_path>/         # Create the tactical plan
+/qrspi-worktree <artifact_path>/     # Set up an isolated worktree
+/qrspi-implement <artifact_path>/    # Implement phase by phase
+/qrspi-pr <artifact_path>/           # Open the pull request
 ```
 
 Configure with `.qrspi` in your project root:
@@ -135,134 +146,37 @@ shared_dir=/path/to/vault/shared
 
 [Learn more about QRSPI](https://github.com/matanshavit/qrspi)
 
-### Creating an Implementation Plan
-
-The typical workflow starts with planning:
-
-```
-/create-plan
-```
-
-This interactive skill will:
-1. Gather context about what you want to build
-2. Research your codebase for relevant patterns
-3. Help you design the implementation approach
-4. Generate a detailed, phase-based plan
-
-**Example**: Planning a new authentication feature
-```
-User: /create-plan
-Assistant: I'll help you create a detailed implementation plan...
-User: We need to add OAuth2 support. See ticket ENG-123.
-Assistant: [Reads ticket, researches codebase, asks clarifying questions...]
-```
-
-### Executing a Plan
-
-Once you have a plan:
-
-```bash
-/implement-plan thoughts/shared/plans/2026-04-16-oauth2-support.md
-```
-
-This will:
-1. Load and review your plan
-2. Guide you through each implementation phase
-3. Verify success criteria after each phase
-4. Track progress
-
-### Researching Your Codebase
-
-To understand how something works:
-
-```bash
-/research-codebase
-```
-
-This spawns multiple agents in parallel to:
-- Find relevant files and components
-- Analyze implementation patterns
-- Identify architecture and conventions
-- Return specific file:line references
-
 ### Creating Commits
 
 After making changes, create a clean commit:
 
-**For regular commits** (user-attributed):
 ```bash
-/commit (or /ci-commit for CI workflows)
+/commit
 ```
 
-**For CI/CD commits** (Claude-attributed):
-```bash
-/ci_commit
-```
-
-Both commands will:
+This will:
 1. Review your changes
 2. Suggest logical groupings
-3. Create atomic, well-described commits
+3. Create atomic, well-described commits (no Claude attribution)
 4. Follow repository conventions
 
-## Workflow Examples
+### Researching Your Codebase
 
-### Example 1: Adding a New Feature
+The QRSPI research skills and the research agents spawn focused subagents in parallel to:
 
-```bash
-# 1. Create a plan
-/create-plan
+- Find relevant files and components (`codebase-locator`)
+- Analyze implementation patterns (`codebase-analyzer`)
+- Discover examples to model after (`codebase-pattern-finder`)
+- Return specific `file:line` references
 
-# 2. Follow the planning dialog
-# (research, ask questions, refine approach)
-
-# 3. Get approval and review the plan file
-# 4. Start implementation
-/implement-plan thoughts/shared/plans/YYYY-MM-DD-feature.md
-
-# 5. Follow each phase with verification
-# 6. Commit your work
-/commit (or /ci-commit for CI workflows)
-```
-
-### Example 2: Understanding Existing Code
+### Reviewing and Debugging Ruby
 
 ```bash
-# 1. Research the codebase
-/research-codebase
-
-# 2. Agents will find and analyze related code
-# (runs in parallel for speed)
-
-# 3. Review findings to understand the architecture
-# 4. Use insights to inform your changes
-```
-
-### Example 3: Refactoring with Confidence
-
-```bash
-# 1. Create a plan for the refactoring
-/create-plan
-
-# 2. Specify scope carefully
-# (what you're NOT changing)
-
-# 3. Get detailed phase-by-phase guidance
-/implement-plan [your-plan-file]
-
-# 4. Verify each phase works
-# 5. Commit with clear messages
-/commit (or /ci-commit for CI workflows)
+/rails-code-review    # Clean-code review of Ruby changes
+/ruby-debug           # Set a breakpoint and inspect a failing test
 ```
 
 ## Key Features
-
-### 🎯 Interactive Planning
-- Gathers context automatically
-- Researches your codebase in parallel
-- Asks clarifying questions
-- Proposes design options
-- Iterates until you're confident
 
 ### 🔍 Intelligent Research
 - Runs multiple agents simultaneously
@@ -272,7 +186,7 @@ Both commands will:
 - Returns specific code references
 
 ### ✅ Verification Built-in
-- Success criteria at each phase
+- Success criteria at each QRSPI phase
 - Separated into automated and manual checks
 - Guides you through verification
 - Tracks progress
@@ -284,23 +198,18 @@ Both commands will:
 - No unwanted attribution
 - Full user control
 
-## Configuration
+## Maintenance
 
-The skills work with Claude Code's built-in features. No additional configuration needed for basic usage.
+### Bump Version
 
-### Optional: Custom Settings
-
-You can customize behavior through Claude Code settings:
+Version tags are managed with `scripts/bump-version` (semantic versioning via git tags):
 
 ```bash
-# Open settings
-/update-config
+./scripts/bump-version              # Bump patch
+./scripts/bump-version minor        # Bump minor
+./scripts/bump-version major --push # Bump major and push the tag
+./scripts/bump-version --show       # Show current version
 ```
-
-Common customizations:
-- Model selection for planning agents (Opus for complex planning)
-- Permission levels for file operations
-- Custom commit message templates
 
 ## Troubleshooting
 
@@ -310,13 +219,8 @@ Common customizations:
    ```bash
    ls ~/.claude/skills/
    ```
-
-2. Reload Claude Code or restart the application
-
-3. Check that files are readable:
-   ```bash
-   file ~/.claude/skills/commit (or /ci-commit for CI workflows).md
-   ```
+2. Reload Claude Code or restart the application.
+3. Check that each skill directory contains a `SKILL.md`.
 
 ### Agents not running
 
@@ -324,10 +228,8 @@ Common customizations:
    ```bash
    ls -l ~/.claude/agents/
    ```
-
-2. Check Claude Code has agent support enabled
-
-3. Verify agent files have correct format (YAML frontmatter + markdown)
+2. Check that your agent tool has agent/subagent support enabled.
+3. Verify agent files have the correct format (YAML frontmatter + markdown).
 
 ### Permission errors
 
@@ -336,53 +238,13 @@ Some operations require user approval. When prompted:
 - Approve once to proceed
 - Deny to skip (and adjust your approach)
 
-## Performance Tips
-
-### For Large Codebases
-
-- Use `codebase-locator` first to narrow scope
-- Specify file patterns in agent prompts
-- Break research into focused questions
-- Use `codebase-pattern-finder` to find examples quickly
-
-### For Complex Plans
-
-- Start with `/create-plan` for interactive guidance
-- Let agents research in parallel (they run concurrently)
-- Review findings before planning
-- Break into smaller phases for clarity
-
-### For Better Commits
-
-- Use `/commit (or /ci-commit for CI workflows)` for thoughtful, atomic commits
-- Group related changes together
-- Write messages that explain *why*, not just *what*
-- Review the diff before confirming
-
 ## Requirements
 
-- **Claude Code** CLI or IDE extension
-- **Git** (for commit commands)
+- **Claude Code** CLI or IDE extension (or another agentskills.io-compatible tool)
+- **Git** (for commit and worktree skills)
 - **~/.claude/** directory (created automatically)
 
 No other dependencies required!
-
-## Getting Help
-
-### Within Claude Code
-
-All commands include built-in help:
-
-```bash
-/create-plan     # Interactive guidance
-/implement-plan  # Phase-by-phase walkthrough
-/research-codebase  # Automatic parallel research
-```
-
-### External Resources
-
-- Claude Code docs: https://claude.com/claude-code
-- Git docs: https://git-scm.com/doc
 
 ## Contributing
 
@@ -400,11 +262,10 @@ MIT
 
 ## Credits
 
-Inspired by and adapted from 
+Inspired by and adapted from
 
-- [humanlayer/humanlayer](https://github.com/humanlayer/humanlayer).
-- [https://github.com/mattpocock/skills](https://github.com/mattpocock/skills)
-
+- [humanlayer/humanlayer](https://github.com/humanlayer/humanlayer)
+- [mattpocock/skills](https://github.com/mattpocock/skills)
 
 ---
 

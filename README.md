@@ -23,6 +23,7 @@ skilladiko/
 |-------|---------|
 | **`commit`** | Create git commits with clear, atomic messages and full user control (no Claude attribution). |
 | **`handoff`** | Write or update a handoff document so the next agent with fresh context can continue the work. |
+| **`spec-grooming`** | Explore a ticket's problem space using Socratic probing. Uncover undocumented decisions, expose systemic gaps, and ensure complete understanding before dev starts. |
 | **`grill-me`** | Interview you relentlessly about a plan or design until reaching shared understanding, resolving each branch of the decision tree. |
 | **`to-issues`** | Break a plan, spec, or PRD into independently-grabbable GitHub issues using tracer-bullet vertical slices. |
 | **`zoom-out`** | Step back and give broader context or a higher-level perspective on a section of code. |
@@ -145,6 +146,23 @@ shared_dir=/path/to/vault/shared
 ```
 
 [Learn more about QRSPI](https://github.com/matanshavit/qrspi)
+
+### Ticket Specification Review
+
+Before a ticket goes to development, use spec-grooming to explore its problem space:
+
+```bash
+/spec-grooming
+```
+
+Paste or reference your ticket. The skill will:
+1. Ask probing questions across 7 exploration themes
+2. Surface undocumented decisions and assumptions
+3. Expose gaps in problem understanding
+4. Identify systemic inconsistencies with existing patterns
+5. Ensure dev has complete context to start work
+
+Helps catch PO blindspots early: scope creep, missing business rules, cascading effects, lifecycle gaps.
 
 ### Creating Commits
 

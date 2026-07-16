@@ -42,7 +42,6 @@ QRSPI is a phased workflow for breaking down complex coding tasks systematically
 | **`qrspi-design`** | Design discussion — align on where we are going before planning how. |
 | **`qrspi-structure`** | Structure outline — vertical slices with test checkpoints. |
 | **`qrspi-plan`** | Tactical implementation plan — the agent's working document. |
-| **`qrspi-worktree`** | Create an isolated git worktree for implementation. |
 | **`qrspi-implement`** | Execute the plan phase by phase with verification checkpoints. |
 | **`qrspi-pr`** | Create a pull request with context from the design discussion. |
 
@@ -124,26 +123,21 @@ All skills work the same way across agent systems. Use the skill name with a lea
 QRSPI breaks complex coding tasks into ordered phases:
 
 ```text
-Question → Research → Design → Structure → Plan → Worktree → Implement → PR
+Question → Research → Design → Structure → Plan → Implement → PR
 ```
 
 **Quick Start:**
 ```bash
-/qrspi-question "Your task here"     # Decompose into research questions
-/qrspi-research <artifact_path>/     # Research the codebase (facts only)
-/qrspi-design <artifact_path>/       # Align on the approach
-/qrspi-structure <artifact_path>/    # Break into vertical slices
-/qrspi-plan <artifact_path>/         # Create the tactical plan
-/qrspi-worktree <artifact_path>/     # Set up an isolated worktree
-/qrspi-implement <artifact_path>/    # Implement phase by phase
-/qrspi-pr <artifact_path>/           # Open the pull request
+/qrspi-question "Your task here"   # Decompose into research questions
+/qrspi-research                    # Research the codebase (facts only)
+/qrspi-design                      # Align on the approach
+/qrspi-structure                   # Break into vertical slices
+/qrspi-plan                        # Create the tactical plan
+/qrspi-implement                   # Implement phase by phase
+/qrspi-pr                          # Open the pull request
 ```
 
-Configure with `.qrspi` in your project root:
-```sh
-issues_dir=/path/to/vault/issues
-shared_dir=/path/to/vault/shared
-```
+Artifacts (`task.md`, `questions.md`, `research.md`, …) are written to the current working directory, so run each phase from the same directory. Each phase also accepts an optional artifact path (e.g. `/qrspi-research path/to/dir/`) if you keep artifacts elsewhere. No configuration file is needed.
 
 [Learn more about QRSPI](https://github.com/matanshavit/qrspi)
 
@@ -259,7 +253,7 @@ Some operations require user approval. When prompted:
 ## Requirements
 
 - **Claude Code** CLI or IDE extension (or another agentskills.io-compatible tool)
-- **Git** (for commit and worktree skills)
+- **Git** (for the commit skill)
 - **~/.claude/** directory (created automatically)
 
 No other dependencies required!

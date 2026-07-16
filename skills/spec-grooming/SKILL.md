@@ -186,4 +186,4 @@ Structure: **Current State → Gap → Target State → Invariant Impact**
 
 If verdict = "ready for dev" AND validation passes:
 1. Copy `grooming.md` → `task.md`
-2. Run `/qrspi-question <artifact_path>/` to start technical research/design phase
+2. Run `/qrspi-question` with the groomed task to start the technical research/design phase

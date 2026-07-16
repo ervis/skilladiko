@@ -1,7 +1,7 @@
 ---
 description: Tactical implementation plan — the agent's working document
 model: opus
-argument-hint: "<artifact_path>/"
+argument-hint: "[artifact_path/]"
 ---
 
 # Plan — Tactical Implementation Details
@@ -9,6 +9,8 @@ argument-hint: "<artifact_path>/"
 Expand the structure outline into a detailed, actionable implementation plan. This is the **agent's working document** — it should contain everything needed to implement without further context. The human reviews the design and structure; this document is for spot-checking.
 
 ## Input
+
+If no artifact path is provided, `$ARGUMENTS` is the current directory (`.`).
 
 Read `$ARGUMENTS/structure.md`, `$ARGUMENTS/design.md`, and `$ARGUMENTS/research.md`.
 
@@ -69,11 +71,7 @@ Read `$ARGUMENTS/structure.md`, `$ARGUMENTS/design.md`, and `$ARGUMENTS/research
 ## Output
 
 - File written: `plan.md` in artifact directory
-- Tell the user: "Next: run `/qrspi-worktree <artifact_path>/` to set up an isolated worktree, or `/qrspi-implement <artifact_path>/` to implement in the current tree."
-
-## Dependencies
-
-- `issues_dir` and `shared_dir` must be correctly configured in `.qrspi` file
+- Tell the user: "Next: run `/qrspi-implement`"
 
 ## Rules
 

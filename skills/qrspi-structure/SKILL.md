@@ -1,7 +1,7 @@
 ---
 description: Structure outline — vertical slices with test checkpoints
 model: opus
-argument-hint: "<artifact_path>/"
+argument-hint: "[artifact_path/]"
 ---
 
 # Structure — How Do We Get There?
@@ -9,6 +9,8 @@ argument-hint: "<artifact_path>/"
 Create a ~2-page structure outline that breaks the design into **vertical slices** — each independently testable. Show the signatures, types, and phase boundaries — not the full implementation.
 
 ## Input
+
+If no artifact path is provided, `$ARGUMENTS` is the current directory (`.`).
 
 Read `$ARGUMENTS/design.md` and `$ARGUMENTS/research.md`.
 
@@ -71,11 +73,7 @@ Read `$ARGUMENTS/design.md` and `$ARGUMENTS/research.md`.
 ## Output
 
 - File written: `structure.md` in artifact directory
-- Tell the user: "Next: run `/qrspi-plan <artifact_path>/`"
-
-## Dependencies
-
-- `issues_dir` and `shared_dir` must be correctly configured in `.qrspi` file
+- Tell the user: "Next: run `/qrspi-plan`"
 
 ## Rules
 

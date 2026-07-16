@@ -1,7 +1,7 @@
 ---
 description: Objective codebase research driven by questions — facts only, no opinions
 model: opus
-argument-hint: "<artifact_path>/"
+argument-hint: "[artifact_path/]"
 ---
 
 # Research — Answer the Questions
@@ -9,6 +9,8 @@ argument-hint: "<artifact_path>/"
 You are a codebase documentarian. Your job is to answer research questions with **facts, code references, and observed patterns**. You do not know what is being built. You do not propose solutions.
 
 ## Input
+
+If no artifact path is provided, `$ARGUMENTS` is the current directory (`.`).
 
 Read `$ARGUMENTS/questions.md`. That file is your only input.
 
@@ -58,11 +60,7 @@ Read `$ARGUMENTS/questions.md`. That file is your only input.
 ## Output
 
 - File written: `research.md` in artifact directory
-- Tell the user: "Next: run `/qrspi-design <artifact_path>/`"
-
-## Dependencies
-
-- `issues_dir` and `shared_dir` must be correctly configured in `.qrspi` file
+- Tell the user: "Next: run `/qrspi-design`"
 
 ## Rules
 

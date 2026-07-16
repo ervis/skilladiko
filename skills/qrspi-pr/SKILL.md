@@ -1,6 +1,6 @@
 ---
 description: Create a pull request with context from the design discussion
-argument-hint: "<artifact_path>/"
+argument-hint: "[artifact_path/]"
 ---
 
 # PR — Create the Pull Request
@@ -8,6 +8,8 @@ argument-hint: "<artifact_path>/"
 Create a pull request with a description grounded in the design document and the actual diff.
 
 ## Input
+
+If no artifact path is provided, `$ARGUMENTS` is the current directory (`.`).
 
 Read `$ARGUMENTS/design.md` for context on what was built and why.
 
@@ -49,10 +51,6 @@ Read `$ARGUMENTS/design.md` for context on what was built and why.
 
 - PR created on GitHub
 - URL reported to the user
-
-## Dependencies
-
-- `issues_dir` and `shared_dir` must be correctly configured in `.qrspi` file
 
 ## Rules
 

@@ -1,7 +1,7 @@
 ---
 description: Design discussion — align on where we are going before planning how
 model: opus
-argument-hint: "<artifact_path>/"
+argument-hint: "[artifact_path/]"
 ---
 
 # Design — Where Are We Going?
@@ -9,6 +9,8 @@ argument-hint: "<artifact_path>/"
 Create a ~200-line design document that captures the current state, desired end state, design decisions, and patterns to follow. This is the **lowest-cost point for direction changes** — get alignment here before investing in detailed planning.
 
 ## Input
+
+If no artifact path is provided, `$ARGUMENTS` is the current directory (`.`).
 
 Read `$ARGUMENTS/task.md`, `$ARGUMENTS/questions.md`, and `$ARGUMENTS/research.md`.
 
@@ -70,11 +72,7 @@ Read `$ARGUMENTS/task.md`, `$ARGUMENTS/questions.md`, and `$ARGUMENTS/research.m
 ## Output
 
 - File written: `design.md` in artifact directory
-- Tell the user: "Next: run `/qrspi-structure <artifact_path>/`"
-
-## Dependencies
-
-- `issues_dir` and `shared_dir` must be correctly configured in `.qrspi` file
+- Tell the user: "Next: run `/qrspi-structure`"
 
 ## Rules
 

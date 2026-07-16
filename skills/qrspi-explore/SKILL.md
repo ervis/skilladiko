@@ -1,7 +1,7 @@
 ---
 description: Iterative research exploration — one question per round, research it, Socratically probe the answer, refine until complete or capped
 model: opus
-argument-hint: "<artifact_path>/"
+argument-hint: "<ticket file, issue URL, or task description>"
 ---
 
 # Explore — Iterative Research Discovery
@@ -30,7 +30,7 @@ Same as qrspi-question:
      - Implicit assumptions in the current system
      - How these interact and where they might conflict
 
-3. **Call `/qrspi-research <artifact_path>/`** to answer the question
+3. **Call `/qrspi-research`** to answer the question
    - Wait for research.md to be written
    - qrspi-research will spawn codebase agents to explore
 
@@ -62,7 +62,7 @@ Same as qrspi-question:
    - **New thread** (thread bottomed out): the most foundational remaining unknown, framed like step 2.
    - Add it to questions.md (append, don't replace).
 
-8. **Call `/qrspi-research <artifact_path>/`** again
+8. **Call `/qrspi-research`** again
    - Research will see every question asked so far (all prior rounds + this one)
    - Research.md will be updated with new findings
 
@@ -116,13 +116,12 @@ Otherwise, stop when **any** of these are true:
 ## Output
 
 - Files written: `questions.md` and `research.md` in artifact directory (evolved through all rounds)
-- Tell the user: "Next: run `/qrspi-design <artifact_path>/`"
+- Tell the user: "Next: run `/qrspi-design`"
 
 ## Configuration
 
 - Mode is **sequential only**: one question per round, drilling a single thread depth-first before opening the next.
 - `max_rounds`: Max iteration rounds (default: 10). Prevents infinite loops/hallucination.
-- `issues_dir` and `shared_dir` from `.qrspi` file
 
 ## Rules
 

@@ -1,6 +1,6 @@
 ---
 description: Execute the plan phase by phase with verification checkpoints
-argument-hint: "<artifact_path>/"
+argument-hint: "[artifact_path/]"
 ---
 
 # Implement — Execute the Plan
@@ -9,8 +9,10 @@ Implement the plan one phase at a time, verifying each phase before proceeding. 
 
 ## Input
 
+If no artifact path is provided, `$ARGUMENTS` is the current directory (`.`).
+
 Read `$ARGUMENTS/plan.md`. That is your primary working document.
-If `$ARGUMENTS/plan.md` does not exist, stop immediately and respond: "Cannot find plan.md at [resolved path]. Please verify the argument path and re-run." Do not attempt to create or infer a plan.
+If `$ARGUMENTS/plan.md` does not exist, stop immediately and respond: "Cannot find plan.md at [resolved path]. Please run from the artifact directory or pass its path, then re-run." Do not attempt to create or infer a plan.
 
 ## Process
 
@@ -67,11 +69,7 @@ If you're starting fresh in a new context window:
 
 - Code changes implemented according to the plan
 - `plan.md` updated with checked verification items
-- Tell the user: "Next: run `/qrspi-pr <artifact_path>/`"
-
-## Dependencies
-
-- `issues_dir` and `shared_dir` must be correctly configured in `.qrspi` file
+- Tell the user: "Next: run `/qrspi-pr`"
 
 ## Rules
 

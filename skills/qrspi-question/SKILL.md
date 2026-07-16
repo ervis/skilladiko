@@ -14,8 +14,6 @@ The user provides a task description, ticket file path, or issue reference.
 
 ## Process
 
-0. **Validate QRSPI configuration** by running `/qrspi-validate` to resolve artifact directories. Use the returned `issues_dir` and `shared_dir` for all subsequent steps.
-
 1. **Read any provided files fully** before doing anything else.
 
 2. **Light codebase exploration**: Spawn a **codebase-locator** agent to find which areas of the codebase relate to the task. You need to know what exists to write good questions.
@@ -31,15 +29,9 @@ The user provides a task description, ticket file path, or issue reference.
    Good: "What patterns exist for database migrations, and how are they tested?"
    Bad: "How should we add a new migration for the users table?"
 
-4. **Determine the artifact directory**:
-   - With ticket number: `<issues_dir>/PROJ-1234/`
-   - Without ticket: `<shared_dir>/YYYY-MM-DD-brief-description/`
+4. **Write `task.md`** to the current directory — a clean 2-3 sentence description of what's being built and why. This file persists the task context for later phases so the user doesn't have to re-explain it.
 
-5. **Create the artifact directory** if it doesn't exist (e.g., `mkdir -p <issues_dir>/<id>/`).
-
-6. **Write `task.md`** — a clean 2-3 sentence description of what's being built and why. This file persists the task context for later phases so the user doesn't have to re-explain it.
-
-7. **Write `questions.md`** to the artifact directory:
+5. **Write `questions.md`** to the current directory:
 
    ```markdown
    # Research Questions
@@ -54,21 +46,12 @@ The user provides a task description, ticket file path, or issue reference.
    ...
    ```
 
-8. **Present questions to the user** and wait for approval or edits before finalizing.
+6. **Present questions to the user** and wait for approval or edits before finalizing.
 
 ## Output
 
-- Directory created: `<issues_dir>/<id>/` or `<shared_dir>/<id>/`
-- Files written: `task.md` and `questions.md` in artifact directory
-- Tell the user: "Next: run `/qrspi-research <artifact_path>/`"
-
-## Configuration
-
-Use `issues_dir` and `shared_dir` from `.qrspi` env file.
-
-## Dependencies
-
-- `issues_dir` and `shared_dir` must be correctly configured in `.qrspi` file
+- Files written: `task.md` and `questions.md` in the current directory
+- Tell the user: "Next: run `/qrspi-research`"
 
 ## Rules
 

@@ -28,6 +28,7 @@ skilladiko/
 | **`to-issues`** | Break a plan, spec, or PRD into independently-grabbable GitHub issues using tracer-bullet vertical slices. |
 | **`zoom-out`** | Step back and give broader context or a higher-level perspective on a section of code. |
 | **`caveman`** | Ultra-compressed communication mode that cuts token usage ~75% while keeping full technical accuracy. |
+| **`doc-reduce`** | Reduce a document to its concise form — every word carries meaning, like a math book. Cut tokens, hunt redundancy, keep all meaning. |
 | **`rails-code-review`** | Review Ruby code for clean-code principles and improve readability and maintainability. |
 | **`ruby-debug`** | Debug a failing Ruby test by setting a breakpoint and inspecting state (bash + tmux, no gem dependencies). |
 

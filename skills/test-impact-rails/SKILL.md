@@ -1,11 +1,11 @@
 ---
 name: test-impact-rails
-description: Rails/Ruby stack pack for /test-impact — vocabulary, entry points, invariants, test layers, flakiness fixes. Invoked by the generic /test-impact skill when a Rails/Ruby project is detected.
+description: Rails/Ruby stack pack for /test-impact — vocabulary, entry points, invariants, test layers, flakiness fixes. Loaded by /test-impact when a Rails/Ruby project is detected.
 ---
 
 # Test Impact — Rails/Ruby Stack Pack
 
-This is a **stack pack**: concrete vocabulary and rules the generic `/test-impact` skill loads when it detects a Rails or Ruby project. It is not invoked directly by the user — `/test-impact` loads it.
+**Stack pack**: concrete vocabulary the generic `/test-impact` skill loads when it detects a Rails or Ruby project. Not invoked directly — `/test-impact` loads it.
 
 Detection signals (any one): `Gemfile` containing `rails`, `config/routes.rb`, `app/` + `config/` layout, `spec/` or `test/` dirs, `*.gemspec`, `Rakefile` with `RSpec`/`Minitest`.
 
@@ -25,7 +25,7 @@ Grep for callers:
 - `def method_name` overrides (subclasses, modules)
 - Scope usage: `Model.scope_name`
 
-Mark direct vs transitive. A chain crosses a process/api boundary when it hits a controller → service → model callback, or a job enqueued from one.
+Mark direct vs transitive. A chain crosses a process/api boundary when it hits controller → service → model callback, or a job enqueued from one.
 
 ## Blast radius tiers
 

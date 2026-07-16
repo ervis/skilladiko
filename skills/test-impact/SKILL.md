@@ -8,17 +8,30 @@ argument-hint: "[artifact_path/ | git ref | path/to/file | path/to/dir/ | task d
 
 Given a change, identify **what is touched, what depends on it, what can break, and how to prove it still works**. Output is a catalog of test cases — not the tests themselves.
 
+## Philosophy
+
+The catalog is cheap to edit; test code is expensive to rewrite. **Iterate on the document, not the code.** Get the catalog right (cases, invariants, priorities) before any test code is written.
+
+LLMs are good at **breadth** (enumerate cases, trace callers, scaffold fixtures) and bad at **judgment** (which invariant matters, what the contract really is). The efficient flow makes the LLM generate, the human select:
+
+| LLM does (generate) | Human does (judge) |
+|---|---|
+| Inventory changed symbols | Pick which invariants matter |
+| Trace callers (`file:line`) | Define the contract |
+| Enumerate edge/error cases | Prioritize |
+| Scaffold fixtures/factories | Judge "is this test meaningful" |
+| Implement agreed cases | Verify the test fails for the right reason |
+| Gap analysis on existing tests | Decide acceptable coverage gaps |
+
+The highest-leverage decision is **which invariants to pin** — and the one LLMs hallucinate worst. This skill surfaces candidates with evidence; the human picks.
+
 ## Stance: document, don't implement.
 
-- DO NOT write test code. Describe test cases.
-- DO NOT run tests or fix failures.
-- DO NOT modify source or test files.
-- DO NOT critique the change or suggest refactors.
-- ONLY document: dependencies, blast radius, entry points, and proposed test cases.
+ONLY document: dependencies, blast radius, entry points, and proposed test cases. Do NOT write test code, run tests, fix failures, modify source/test files, critique the change, or suggest refactors.
 
 ## Step 0 — Detect the stack and load a stack pack
 
-Before anything else, detect the project's stack. Check in this order (first match wins):
+Detect the project's stack (first match wins):
 
 | Signal | Stack | Pack to load |
 |---|---|---|
@@ -29,20 +42,20 @@ Before anything else, detect the project's stack. Check in this order (first mat
 | `pyproject.toml` / `requirements.txt` | Python | *(no pack yet)* |
 | none of the above | unknown | use generic terms below |
 
-**If a pack exists, load it via the `skill` tool and follow its vocabulary** (symbol roles, entry points, test layers, invariants, flakiness isolations, test framework). The pack overrides the generic terms in this skill. The generic process below still applies; only the concrete vocabulary changes.
+**If a pack exists, load it via the `skill` tool and follow its vocabulary** (symbol roles, entry points, test layers, invariants, flakiness isolations, test framework). The pack overrides generic terms; the process below is unchanged.
 
-**If no pack exists**, proceed with generic terms:
+**If no pack exists**, use generic terms:
 - Symbols = public functions / methods / classes / types / exports
 - Entry points = HTTP routes, CLI commands, UI components, public API exports, background jobs, event subscriptions
 - Test layers = unit | integration | e2e | contract | property
 - Invariants = cite `file:line`, never invent
 - Flakiness = time, randomness, network, filesystem — note the project's stub/mock/freeze convention by reading existing tests
 
-When in doubt about the project's testing convention, read 2-3 existing test files and mirror their style. Do not assume a framework.
+When in doubt about the testing convention, read 2-3 existing test files and mirror their style. Do not assume a framework.
 
 ## Input
 
-`$ARGUMENTS` tells you what to review. Resolve it to one of these modes:
+`$ARGUMENTS` tells you what to review. Resolve to one mode:
 
 | Caller says | Mode | How to resolve |
 |---|---|---|
@@ -57,43 +70,40 @@ When in doubt about the project's testing convention, read 2-3 existing test fil
 
 ### Resolution rules
 
-1. If `$ARGUMENTS` is empty → uncommitted mode.
-2. If `$ARGUMENTS` contains `...` or is a known git ref (resolve with `git rev-parse --verify`) → diff mode.
-3. If `$ARGUMENTS` is a path that exists:
-   - Directory with `structure.md` or `plan.md` → qrspi mode.
-   - Directory without those → folder mode.
-   - File → file mode.
-4. Otherwise → inferred mode (treat `$ARGUMENTS` as a task description).
+1. Empty → uncommitted mode.
+2. Contains `...` or is a known git ref (`git rev-parse --verify`) → diff mode.
+3. Existing path: directory with `structure.md` or `plan.md` → qrspi mode; directory without → folder mode; file → file mode.
+4. Otherwise → inferred mode (treat as a task description).
 
-If resolution fails (e.g. ref doesn't exist, path not found), stop and report the exact error. Do not guess.
+If resolution fails (bad ref, missing path), stop and report the exact error. Do not guess.
 
-### Diff mode (branches, refs, ranges)
+### Diff mode
 
 - `git diff <ref> --stat` → file list + churn.
 - `git diff <ref>` → hunks. Capture changed symbols per hunk.
-- For a range `<refA>...<refB>`, diff the three-way merge-base: `git diff $(git merge-base <refA> <refB>) <refB>`.
+- Range `<refA>...<refB>`: `git diff $(git merge-base <refA> <refB>) <refB>`.
 
 ### File mode
 
-A single file is Tier 0. Inventory its public symbols + invariants, then run the standard process. Useful for "review tests for this one module."
+A single file is Tier 0. Inventory its public symbols + invariants, then run the standard process.
 
 ### Folder mode
 
-When given a module/folder (no qrspi artifacts), the goal shifts from "what changed" to "what's the contract this module exposes, and how do we prove it holds." The module IS Tier 0.
+When given a module/folder (no qrspi artifacts), the goal shifts from "what changed" to "what's the contract this module exposes, and how do we prove it holds." The module IS Tier 0. Also the right mode for **audit/review of an untested module** — output is a proposed test suite from scratch, not a delta.
 
-1. **Inventory the public surface**: enumerate every public symbol (functions, methods, classes, types, constants, exports). Skip private/internal helpers unless they encode an invariant.
-2. **Read each public symbol's signature + docstring/comment** to infer its contract (inputs, outputs, side effects, errors).
+1. **Inventory the public surface**: every public symbol (functions, methods, classes, types, constants, exports). Skip private/internal helpers unless they encode an invariant.
+2. **Read each symbol's signature + docstring/comment** to infer its contract (inputs, outputs, side effects, errors).
 3. **Identify the module's invariants**: properties that must always hold. Cite `file:line` for where each is enforced or implied.
-4. Then proceed with the standard process (dependency trace → blast radius → entry points → test cases), treating the module's public symbols as Tier 0.
-
-Folder mode is also the right mode for **audit/review of an untested module** — the output is a proposed test suite from scratch, not a delta.
+4. Proceed with the standard process, treating the module's public symbols as Tier 0.
 
 ## Process
 
+Ordered: each step produces a reviewed artifact before the next runs. Do not skip ahead.
+
 ### 1. Inventory the change
 
-- **Diff mode**: list every file touched (added, modified, deleted). For each modified file, capture the hunks: what symbols changed. Categorize each change: **new**, **modified signature**, **modified body**, **removed**.
-- **File mode**: enumerate the file's public symbols + invariants. Categorize each by role (use the stack pack's roles if loaded, else generic: function/method/class/type/constant/side-effecting).
+- **Diff mode**: list every file touched (added, modified, deleted). For each modified file, capture the hunks and what symbols changed. Categorize: **new**, **modified signature**, **modified body**, **removed**.
+- **File mode**: enumerate the file's public symbols + invariants. Categorize each by role (stack pack's roles if loaded, else generic: function/method/class/type/constant/side-effecting).
 - **Folder mode**: list every file in the module. For each, enumerate public symbols. Categorize each by role.
 - **qrspi mode**: read `structure.md`/`plan.md` phases — each phase's "Files affected" + "Key changes" is the inventory.
 - **Inferred mode**: list the symbols/areas the description implies. Mark each as `[assumed]` until confirmed by reading the code.
@@ -110,8 +120,6 @@ Use `codebase-locator` or `codebase-pattern-finder` agents when the dependency s
 
 ### 3. Map the blast radius
 
-Group affected code into tiers:
-
 - **Tier 0 — Direct change**: the files/symbols in the diff.
 - **Tier 1 — Direct consumers**: code that imports/calls Tier 0.
 - **Tier 2 — Transitive consumers**: code that depends on Tier 1, plus integration points (routes, handlers, jobs, UI entry points, CLI commands).
@@ -119,23 +127,16 @@ Group affected code into tiers:
 
 ### 4. Identify entry points
 
-List every place a user, external system, or test can reach the changed code. Use the stack pack's entry point list if loaded; otherwise enumerate generically:
-
-- HTTP routes / handlers
-- CLI commands
-- UI components / pages
-- Public API exports / library entry points
-- Background jobs / cron / queue consumers
-- Event subscriptions
-
-Each entry point is a candidate for an integration/e2e test case.
+List every place a user, external system, or test can reach the changed code. Use the stack pack's entry point list if loaded; otherwise enumerate generically: HTTP routes/handlers, CLI commands, UI components/pages, public API exports/library entry points, background jobs/cron/queue consumers, event subscriptions. Each entry point is a candidate for an integration/e2e test case.
 
 ### 5. Propose test cases
 
-For each change + its blast radius, propose test cases. Each case:
+**Before proposing cases, present the Invariants at Risk list to the user and ask which to pin.** Do not skip this — it is the highest-leverage decision in the flow. Only propose cases for invariants the user confirms (plus happy/edge/error/regression cases for the change itself).
+
+Each case:
 
 - **ID** (e.g. `TC-01`)
-- **Layer**: unit | integration | e2e | contract | property (use the stack pack's layer names if loaded)
+- **Layer**: unit | integration | e2e | contract | property (stack pack's layer names if loaded)
 - **Target**: the symbol or entry point under test (`file:line`)
 - **Scenario**: one sentence describing the situation
 - **Given / When / Then**: the three-line behavior spec
@@ -146,18 +147,20 @@ For each change + its blast radius, propose test cases. Each case:
 Selection rules (Google testing principles):
 
 - **Prevention over detection**: prefer tests that pin down an invariant the change could break, over tests that merely re-state the happy path.
-- **Critical paths + error branches first**. Do not chase 100% line coverage. Note explicitly what is NOT covered and why it's acceptable.
+- **Critical paths + error branches first.** Do not chase 100% line coverage. Note explicitly what is NOT covered and why it's acceptable.
 - **One behavior per case.** If a case needs "and also", split it.
 - **Behavior, not implementation.** Test the observable contract, not private helpers.
-- **Regression cases for bug fixes**: if the diff fixes a bug, the first case is the failing reproduction (red), marked `regression`.
-- **Invariants**: list system invariants the change could violate and propose a case per invariant. Use the stack pack's invariant examples as a checklist, but only list invariants with `file:line` evidence.
+- **Regression cases for bug fixes**: if the diff fixes a bug, the first case is the failing reproduction (red), marked `regression`. The repro is the single highest-value artifact for a bug fix — everything else is secondary.
+- **Invariants**: propose a case per invariant the user confirmed. Use the stack pack's invariant examples as a checklist, but only list invariants with `file:line` evidence.
+- **One case at a time when implementing later.** "Write the suite" produces generic happy-path tests that mirror the implementation. The catalog is batched; the implementation should be one Given/When/Then → one test, fed back for review.
+- **Flakiness declared per case.** Each case touching time/randomness/network/filesystem must declare its isolation strategy (freeze, mock, VCR, tmpdir) in the case block — not as an afterthought.
 
 ### 6. Gap analysis
 
 - Which blast tiers have no proposed case? Note the risk.
 - Which entry points are untested? Note.
 - Which invariants are unverified? Note.
-- Flaky-prone areas (time, randomness, network, filesystem) — flag and note the required isolation strategy (use the stack pack's tooling if loaded, else read existing tests for the project's convention).
+- Flaky-prone areas (time, randomness, network, filesystem) — flag and note the required isolation strategy (stack pack's tooling if loaded, else read existing tests for the project's convention).
 
 ## Output: test-impact.md
 
@@ -221,10 +224,14 @@ Detected: [stack name] | Pack: [pack name or "generic"]
 
 - Tell the user: "Test cases documented in `test-impact.md`. Next: implement the cases, or run `/qrspi-plan` to fold them into the plan."
 - If running inside qrspi flow and `plan.md` exists, suggest adding a "Test cases" section per phase referencing the TC IDs.
+- **Implementation guidance for the next step** (tell the user, do not do it yourself):
+  - Bug fix → write the red repro first, run it, confirm it fails *for the right reason*, then fix the source.
+  - Feature/audit → implement invariant-pinning cases first; happy path is an afterthought.
+  - Feed the implementer one case at a time. Do not hand it the whole catalog and ask for the suite — quality drops with scope.
+  - The run step is non-negotiable. Green is not enough; read the failure before fixing. LLMs write tests that pass for the wrong reason.
 
 ## Rules
 
-- Document only. No test code, no source edits, no running tests.
 - Every claim about the codebase must cite `file:line`.
 - Every proposed case must map to at least one change ID or invariant.
 - Keep the catalog scannable — tables for inventory, one block per test case.

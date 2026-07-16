@@ -30,6 +30,7 @@ Neutral and fact-seeking, not solution-seeking. Hard cap: 20 questions total (in
 Shapes, in priority order:
 - **Producers** — who constructs/fills the abstraction? What slots exist?
 - **Consumers** — who reads it and acts on it? How is the output made from those slots? (Producer + consumer + their connection = the spine.)
+- **Invariants & constraints** — what must hold for the concept to function? Preconditions (what the producer guarantees before hand-off), postconditions (what the consumer assumes on receipt), happens-before rules (operation X must complete before operation Y for correctness — e.g. body built with `cid:` IDs before matching `MIMEImage`s attached), capacity/size limits, allowed values, sanitization/filtering constraints. These are the rules code that "looks right" silently violates.
 - **Off-spine neighbors** — siblings, config, adjacent stations (k=1 in graph terms).
 - **Traps** — what looks like the obvious way and silently doesn't work? Adjacent-but-unrelated machinery that pattern-matches as the extension point?
 
@@ -64,10 +65,11 @@ The report MUST contain, in this order:
 1. **Spine** — the central abstraction + producer → abstraction → consumer chain, end to end, with `file:line` at each hop. One sentence stating the abstraction; then the chain.
 2. **Neighborhood** — the k=1 collaborators off the spine: siblings, config, adjacent stations, with where they live in the file tree.
 3. **Trapdoors** — the silently-doesn't-work traps, with `file:line`. **Mark each `[read]` (directly observed) or `[inferred]` (reasoned, unconfirmed).** Do not blur "read at a line" with "concluded from import order / dispatch logic."
-4. **Paths for your goal** — the stated task connected to findings: which spine station is the edit point, what neighbors constrain it, the idiomatic path(s). If the codebase does not support the goal, say so — state why, name the closest thing. Negative results are valid; do not force a fake path.
-5. **Mirror tests** — the test paths that exercise the spine. The user's safety net.
-6. **Misconceptions** (≤3) — trapdoors that break the mental model, with `file:line`.
-7. **Go deeper** — 1-2 directions, then ask the user which (if any) to pursue. End with a question.
+4. **Invariants & constraints** — the preconditions, postconditions, happens-before rules, capacity limits, allowed values, and sanitization constraints that must hold for the concept to function. With `file:line` for each. These are what code that "looks right" silently violates.
+5. **Paths for your goal** — the stated task connected to findings: which spine station is the edit point, what neighbors constrain it, the idiomatic path(s). If the codebase does not support the goal, say so — state why, name the closest thing. Negative results are valid; do not force a fake path.
+6. **Mirror tests** — the test paths that exercise the spine. The user's safety net.
+7. **Misconceptions** (≤3) — trapdoors that break the mental model, with `file:line`.
+8. **Go deeper** — 1-2 directions, then ask the user which (if any) to pursue. End with a question.
 
 **Small-scope relaxation:** for a single utility or function (3-4 questions cover it), collapse Spine + Neighborhood into one section, and drop any empty section. Do not pad.
 

@@ -6,9 +6,9 @@ argument-hint: "<codebase path | module | concept | task description>"
 
 # Code-Onboard — Mental Model Mining
 
-Onboarding = building the mental model of one concept. A concept has one **central abstraction** — the data structure or interface that *is* the concept; everything else produces, consumes, or configures it. Find it, trace its collaborators both directions, the model builds itself.
+Onboarding = building the mental model of one concept. Anchor on its one **central abstraction** — the data structure or interface that *is* the concept; everything else produces, consumes, or configures it. Trace its collaborators both directions.
 
-The method is structured, evidence-backed reading — not a distinct technique. The "question chain" organizes research into producer/consumer/neighbor/trap questions but is no special mechanism. **The chain runs internally — never print Q/A.** The report is the only artifact.
+**The chain runs internally — never print Q/A.** The report is the only artifact.
 
 ## Input
 
@@ -19,10 +19,12 @@ The method is structured, evidence-backed reading — not a distinct technique. 
 ### Step 1 — Light recon
 Spawn **`codebase-locator`** (or inline Grep/Glob if unavailable) to find which files relate to the target. The locator is a WHERE tool: file tree of the neighborhood, not hand-offs (it doesn't read contents). You need the WHERE before tracing.
 
+**Recon is the only delegation.** Step 4's reading is inline — never spawn `codebase-analyzer` or similar to read for you, however parallel it looks. Re-anchoring (Steps 2, 4) judges whether the abstraction explains the concept end-to-end; that needs the code in your context, not a summary. A subagent's findings make you assert `file:line` you never read — the read-before-answer rule (Step 4) forbids it.
+
 ### Step 2 — Name the central abstraction (provisional)
 Identify the single data structure, interface, or class that *is* the concept. State it explicitly. If multiple are equally central, ask the user which to anchor on. Naming is **provisional** — from recon alone, before deep reading. If Step 4 shows it doesn't explain the concept end-to-end (producer fills it but no consumer produces the user-relevant effect, or consumer reads a *different* structure), rename and retrace **once**. If the second anchor also fails, proceed with the best available and note the gap in the report. Do not loop re-anchoring more than once — an unbounded rename loop is the recursion risk.
 
-### Step 3 — Decompose into 3-7 neutral research questions
+### Step 3 — Decompose into 3-7 initial research questions
 Neutral, fact-seeking, not solution-seeking. **Hard cap: 20 questions total (initial + follow-ups) — when hit, write the report even if coverage feels incomplete; note the gap.** Do not exceed 20. Stop earlier when covered.
 
 Shapes, in priority order:
@@ -32,13 +34,10 @@ Shapes, in priority order:
 - **Off-spine neighbors** — siblings, config, adjacent stations (k=1 in graph terms).
 - **Traps** — what looks like the obvious way and silently doesn't work? Adjacent-but-unrelated machinery pattern-matching as the extension point?
 
-- Good: "Who constructs the abstraction and which fields does it fill?"
-- Bad: "What's the best way to add a custom X?"
-
-Prefer "trace the flow" / "where is X defined" / "who produces/consumes X" over yes/no.
-
 ### Step 4 — Answer each question, then follow up
-For each: **read** the code (never guess; every claim gets a `file:line`), **answer** with facts and `file:line`, generate 1-2 **sharper follow-ups** probing the non-obvious (gaps, gotchas, rationale, extension points), answer them the same way.
+**Read before you answer.** Never describe code you haven't read this session. Every claim gets a `file:line` — no vibes, no `~NNN` approximations: read or omit.
+
+For each: **answer** with facts and `file:line`, generate 1-2 **sharper follow-ups** probing the non-obvious (gaps, gotchas, rationale, extension points), answer them the same way.
 
 **Reading-depth stop:** read each station until you can state its job in one sentence and name its hand-off to the next — then stop. A station is a spine node, not a file to memorize.
 
@@ -57,17 +56,54 @@ Locate the **tests that exercise the spine** — unit/integration tests instanti
 ### Step 7 — Stop and write the report
 Stop when covered — spine traced, neighborhood mapped, traps surfaced (confirmed-or-marked-inferred), extension point for the stated task connected. Do not exceed the 20-question cap (Step 3) — if hit, write the report with what you have and note gaps. Don't pad to a count.
 
-Write a **comprehensive, doc-reduced report** following the template at `skills/code-onboard/report.template` (in this skill's directory). Fill every applicable section; drop inapplicable ones. Every fact, finding, and `file:line` distilled to maximum information density, no redundancy (every word load-bearing, nothing removable without losing meaning).
+Write a **comprehensive, doc-reduced report** in the shape below — sections in this order, every applicable one filled, inapplicable ones dropped. Every fact and `file:line` at maximum density: every word load-bearing, nothing removable without losing meaning.
 
-The report MUST contain, in this order:
-1. **Spine** — central abstraction + producer → abstraction → consumer chain, end to end, `file:line` at each hop. One sentence stating the abstraction; then the chain.
-2. **Neighborhood** — k=1 collaborators off the spine: siblings, config, adjacent stations, with file locations.
-3. **Trapdoors** — silently-doesn't-work traps, with `file:line`. If a trap is unconfirmed, hedge the language ("appears to", "likely") rather than stating as certain.
-4. **Invariants & constraints** — preconditions, postconditions, happens-before rules, capacity limits, allowed values, sanitization constraints that must hold for the concept to function. `file:line` for each. What "looks-right" code silently violates.
-5. **Paths for your goal** — stated task connected to findings: which spine station is the edit point, what neighbors constrain it, the idiomatic path(s). If unsupported, say so — state why, name the closest thing. Negative results are valid; don't force a fake path.
-6. **Mirror tests** — test paths exercising the spine. The user's safety net.
-7. **Misconceptions** (≤3) — trapdoors that break the mental model, with `file:line`.
-8. **Go deeper** — 1-2 directions, then ask the user which (if any) to pursue. End with a question.
+```markdown
+# {{concept}}
+
+## Spine
+{{central abstraction}} — one sentence naming it.
+
+{{producer}} `file:line` → {{abstraction}} `file:line` → {{consumer}} `file:line` → {{effect}} `file:line`
+<!-- One hop per line, `file:line` at each. Trigger at the start, side-effect at the end. -->
+
+## Neighborhood
+<!-- k=1 collaborators off the spine. -->
+- {{sibling | config | adjacent station}} `file:line` — one-line role
+
+## Trapdoors
+<!-- Looks like the obvious way, silently doesn't work. -->
+- {{trap}} `file:line` — the obvious assumption, why it fails
+- {{trap}} `file:line` (likely) — the inference, why it's unconfirmed
+
+## Invariants & constraints
+<!-- What "looks-right" code silently violates. Only the categories that apply. -->
+- **Precondition:** {{producer guarantees before hand-off}} `file:line`
+- **Postcondition:** {{consumer assumes on receipt}} `file:line`
+- **Happens-before:** {{X completes before Y}} `file:line`
+- **Capacity/size limit | Allowed values | Sanitization:** {{constraint}} `file:line`
+
+## Paths for your goal
+<!-- Stated task connected to findings. Negative results are valid; don't force a fake path. -->
+- **Edit point:** {{spine station}} `file:line`
+- **Constraining neighbors:** {{what bounds the change}} `file:line`
+- **Idiomatic path:** {{path}}
+- Or **Not supported** — {{why}} `file:line`; closest: {{alternative}} `file:line`
+
+## Mirror tests
+<!-- The user's safety net. -->
+- {{test file}} `file:line` — what it exercises
+
+## Misconceptions
+<!-- ≤3 trapdoors that break the mental model; cut the weakest. -->
+- {{misconception}} `file:line` — the wrong belief, the disproof
+
+## Go deeper
+- {{direction}}
+- {{direction}}
+
+Which (if any) to pursue?
+```
 
 **Small-scope relaxation:** for a single utility or function (3-4 questions cover it), collapse Spine + Neighborhood into one section, drop empty sections. Don't pad.
 
@@ -75,18 +111,9 @@ The report MUST contain, in this order:
 
 Run the chain **internally** — never emit Q/A. Keep each internal A doc-reduced: facts and `file:line`, no restatement.
 
+**No teaching ornaments.** No comprehension checks, no "in your own words", no phases. Research, not a lesson.
+
 After the chain, ask the user (via the `question` tool) whether to **print the report in the terminal** or **write it to a file**. If file, ask for the path and write the `.md` using the `write` tool. Do only the chosen action — not both.
-
-## Rules
-
-- **Every claim has a `file:line`.** No vibes; no `~NNN` approximations — read or omit.
-- **Confirm traps if cheap.** Unconfirmed traps hedged ("appears to", "likely"), not stated as certain.
-- **Read before you answer.** Never describe code you haven't read this session.
-- **Anchor on one central abstraction.** Name it explicitly; trace its producers and consumers. If you can't name it, you don't have the model yet. Rename if Step 4 shows it's wrong.
-- **Follow-ups probe the non-obvious.** The gap, gotcha, or rationale — reject descriptive follow-ups.
-- **No teaching ornaments.** No comprehension checks, no "in your own words", no phases. Research, not a lesson.
-- **Dense references over prose.** Bullets and `file:line`, not essays.
-- **Honor the stated task.** Questions stay neutral about how X works; "Paths for your goal" connects findings to what the user came to do — including "not supported" if so.
 
 ## Scope
 

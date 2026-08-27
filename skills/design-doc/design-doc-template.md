@@ -66,18 +66,18 @@ The skill goes through each section one at a time.
 For each section, it asks questions until the "must cover" items are answered.
 It does not accept vague answers. It pushes for specifics and numbers.
 
-Throughout all sections, the skill asks about patterns:
-- "What existing pattern does this follow?"
-- "Where in the codebase is that pattern already used?"
-- "Why is following this pattern important here?"
+Throughout all sections, the skill asks about consistency:
+- "How does the codebase already solve this?"
+- "Where in the codebase can you see that approach?"
+- "Does your design use that same approach, or do you deviate?"
 
 Example: You cannot write "make it fast." You must write "P95 latency under 200ms."
-And if you choose a specific approach, you must explain which existing pattern you're following.
+And if you choose a specific approach, you must explain whether it uses existing approaches from the codebase or why you're deviating.
 
 ### Phase 5: Validate
 The skill checks the doc against all Design Goal Metrics:
 
-1. **Pattern Alignment** — Does the design explain which patterns it follows?
+1. **Consistency** — Does the design prefer existing approaches in the codebase? If it deviates, is the deviation justified?
 2. **Agent-Readiness** — Can an agent implement this without asking a question?
 3. **Evidence-Based** — Are claims grounded in exploration or facts, not guesses?
 4. **Completeness** — Are all "must cover" items answered? Any vague sections?
@@ -398,13 +398,13 @@ The Gather phase will surface three things the reviewer needs to see:
 ### Decision Log (in the doc)
 The author explains why each choice was made.
 - Every significant decision is recorded with its rationale.
-- Includes relevant patterns or constraints that influenced the choice.
+- Includes relevant existing approaches or constraints that influenced the choice.
 
 **Example:**
 ```
 Database for user records: PostgreSQL — because existing auth service 
-uses PostgreSQL (pattern consistency), and ACID transactions are required 
-for financial data.
+uses PostgreSQL (consistency with existing approach), and ACID transactions 
+are required for financial data.
 ```
 
 ### Consistency & Invariants (threaded through sections)

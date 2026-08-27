@@ -1,0 +1,26 @@
+{
+  "skill_name": "design-doc",
+  "evals": [
+    {
+      "id": 1,
+      "name": "new-feature-notifications",
+      "prompt": "I need to design a real-time notification system for our dashboard. Users should get alerts when their data changes. Right now we have email notifications but they take 5-10 minutes to arrive. The goal is to show changes in the UI within 2 seconds of them happening. We use PostgreSQL and have a React frontend. Not sure how to handle this without overloading the system with constant polling.",
+      "expected_output": "A complete design doc that covers the problem, goals, existing email system, proposed architecture (WebSocket or Server-Sent Events), success metrics (latency targets, message delivery rate), failure modes (connection drops, notification storms), and the tradeoffs between different approaches. The doc should reference existing patterns in the codebase if any.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "bugfix-slow-export",
+      "prompt": "Users are reporting that exporting data to CSV takes 2-3 minutes for large datasets. The CEO got complaints from a customer. We need to fix this but I'm not sure what the actual bottleneck is. Could be database query, CSV generation, or file I/O. Current implementation just pulls all data and generates CSV in memory.",
+      "expected_output": "A design doc that identifies the performance problem, proposes a solution (chunked processing, streaming, pre-computation), defines success metrics (maximum export time, memory usage), discusses tradeoffs (complexity vs speed), and includes a rollback plan if the fix causes other issues.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "infra-async-migration",
+      "prompt": "We want to move from synchronous request handling to async processing for long-running jobs. This is a big architectural change. We have 15 services that would be affected. I know other teams have done this but I don't want to reinvent the wheel. How do we structure this so it doesn't break existing services while we migrate?",
+      "expected_output": "A design doc that covers the current synchronous architecture, the desired async future state, which existing patterns the codebase already uses for async work, the migration phases (which services first, what testing is needed), blast radius (which teams are affected), failure scenarios (what happens if async workers crash), and a decision log explaining why async is the right choice.",
+      "files": []
+    }
+  ]
+}

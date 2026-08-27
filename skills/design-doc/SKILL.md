@@ -1,5 +1,5 @@
 ---
-description: Write a design doc for agent implementation. Use this whenever you are planning work that an agent will execute, designing a feature or system, making architectural decisions, or planning changes to code or infrastructure. This skill guides you through gathering all the information needed so an agent can implement overnight without asking questions. Use it for any design that will be reviewed, approved, and then handed to an agent for implementation.
+description: Write a design doc for agent implementation. Use this whenever you are planning work that an agent will execute, designing a feature or system, making architectural decisions, or planning changes to code or infrastructure. This skill guides you through gathering all the information needed so an agent can implement overnight without asking questions. It ensures your design is consistent with existing approaches in the codebase, explicit about decisions, and ready for overnight implementation. Use it for any design that will be reviewed, approved, and then handed to an agent for implementation.
 model: opus
 argument-hint: "[artifact_path/]"
 ---
@@ -63,9 +63,10 @@ The skill does not accept vague answers. Examples:
 - You cannot write "add a new function." Write `function_name(param: Type): ReturnType` and its contract.
 - You cannot write "use a new abstraction." Explain the abstraction, its contract, and why it's needed.
 
-Throughout all sections, the skill asks about patterns and signatures:
-- What existing pattern does this follow?
-- Where in the codebase is that pattern already used?
+Throughout all sections, the skill asks about consistency and signatures:
+- How does the codebase already solve this problem?
+- Where in the codebase can you see the existing approach?
+- Does your design use that same approach, or do you deviate? If you deviate, why?
 - What are the exact signatures for new functions or API endpoints?
 - What abstractions does this design introduce or change?
 - What contract does each abstraction promise?

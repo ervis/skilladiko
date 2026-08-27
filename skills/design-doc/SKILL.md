@@ -109,7 +109,7 @@ An agent implements it overnight without further questions.
 - **Ask, don't assume.** Before writing anything, ask the author clarifying questions.
 - **Gather evidence.** If the author makes a claim, ask what evidence backs it up.
 - **Be specific.** Reject vague answers. Push for numbers, patterns, examples.
-- **Name patterns.** Every design decision must explain which pattern it follows.
+- **Explain consistency choices.** Every design decision must explain whether it follows existing approaches in the codebase. If it deviates from existing approaches, explain why.
 - **List changes explicitly.** Every change, even trivial ones, gets documented.
 - **Reference everything.** If the agent needs to know something, it's in the doc or linked.
 - **Check all metrics.** Do not move to the next phase until current phase passes validation.
